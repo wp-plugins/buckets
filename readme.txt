@@ -24,7 +24,7 @@ This plugin is made for developers who like to make their client's lives easier 
 
 1. Upload 'buckets' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Read the documentation to learn how to create buckets. 
+3. Read the documentation to learn how to create Buckets. 
 
 
 == Changelog ==
