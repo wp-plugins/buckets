@@ -29,3 +29,6 @@ This plugin is made for developers who like to make their client's lives easier 
 
 == Changelog ==
 
+= 0.1.4 =
+[Fixed] - Updated plugin and field to work with newest ACF changes. 
+[Fixed] - Minor Bug Fixes
