@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.1.3
+Version: 0.1.4
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -180,14 +180,18 @@ function get_bucket($id)
 
 	//If ACF is Active perform some wizardry
 	if (is_plugin_active('advanced-custom-fields/acf.php')) {
-		while(the_flexible_field("buckets", $id)) {
+		//echo 'hi'; print_r(get_field('buckets', $id));
+		while(has_sub_field("buckets", $id)) {
 			$layout = get_row_layout();
-
 		    ob_start();
 
 		    $file = str_replace(' ', '', $layout) . '.php';
 		    $path = (file_exists(TEMPLATEPATH . '/buckets/' . $file)) ? TEMPLATEPATH . '/buckets/' . $file : WP_PLUGIN_DIR . '/buckets/templates/' . $file;
-		    include($path);
+		    if (file_exists($path)) {
+		    	include($path);
+		    } else {
+		    	return 'Bucket template does not exist.';
+		    }
 
 		    $return .= ob_get_contents();
 
@@ -210,7 +214,7 @@ function get_bucket($id)
 
 function load_first() 
 {
-	$plugin = 'buckets/buckets.php';
+	$this_plugin = 'buckets/buckets.php';
 	$active_plugins = get_option('active_plugins');
 	$this_plugin_key = array_search($this_plugin, $active_plugins);
 	if ($this_plugin_key) 

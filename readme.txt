@@ -1,9 +1,9 @@
 === Buckets ===
 Contributors: Matthew Restorff
-Tags: widgets, buckets, acf, advanced custom fields, widgets alternative
-Requires at least: 3.2.1
+Tags: widgets, buckets, acf, advanced custom fields, custom, field
+Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 0.1.3
+Stable tag: 3.4.1
 
 A widgets alternative that lets you place content anywhere easily.
 
@@ -24,7 +24,8 @@ This plugin is made for developers who like to make their client's lives easier 
 
 1. Upload 'buckets' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Read the documentation to learn how to create Buckets. 
+3. Read the documentation to learn how to create buckets. 
 
 
 == Changelog ==
+
