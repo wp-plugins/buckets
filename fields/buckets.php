@@ -39,7 +39,7 @@ class Buckets_field extends acf_Field
 
    		// vars
 		$options = array(
-			'post_type'	=>	'',
+			'post_type'	=>	'buckets',
 			'taxonomy' => 'all',
 			'posts_per_page' => 10,
 			'paged' => 0,
@@ -187,7 +187,7 @@ class Buckets_field extends acf_Field
 	{
 		// vars
 		$defaults = array(
-			'post_type'	=>	'',
+			'post_type'	=>	'buckets',
 			'max' 		=>	-1,
 			'taxonomy' 	=>	array('all'),
 		);
@@ -211,11 +211,9 @@ class Buckets_field extends acf_Field
 		{
 			$field['post_type'] = get_post_types( array('public' => true) );
 		}
-		$field['post_type'][0] = 'buckets';
 		$field['type'] = 'relationship';
-		//echo '<pre>'; print_r($field); echo '</pre>';
 		?>
-<div class="acf_relationship" data-max="<?php echo $field['max']; ?>" data-s="" data-paged="1" data-post_type="<?php echo implode(',', $field['post_type']); ?>" data-taxonomy="<?php echo implode(',', $field['taxonomy']); ?>">
+<div class="acf_relationship" data-max="<?php echo $field['max']; ?>" data-s="" data-paged="1" data-post_type="buckets" data-taxonomy="<?php echo implode(',', $field['taxonomy']); ?>">
 	
 	<!-- Hidden Blank default value -->
 	<input type="hidden" name="<?php echo $field['name']; ?>" value="" />
@@ -283,6 +281,8 @@ class Buckets_field extends acf_Field
 	<!-- / Right List -->
 	
 </div>
+
+
 		<?php
 
 	
@@ -303,7 +303,7 @@ class Buckets_field extends acf_Field
 	{
 		// vars
 		$defaults = array(
-			'post_type'	=>	'',
+			'post_type'	=>	'buckets',
 			'max' 		=>	'',
 			'taxonomy' 	=>	array('all'),
 		);
@@ -311,58 +311,7 @@ class Buckets_field extends acf_Field
 		$field = array_merge($defaults, $field);
 		
 		?>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
-			<td class="label">
-				<label for=""><?php _e("Post Type",'acf'); ?></label>
-			</td>
-			<td>
-				<?php 
-				
-				$choices = array(
-					''	=>	__("All",'acf')
-				);
-				
-				$post_types = get_post_types( array('public' => true) );
-				
-				foreach( $post_types as $post_type )
-				{
-					$choices[$post_type] = $post_type;
-				}
-				
-				$this->parent->create_field(array(
-					'type'	=>	'select',
-					'name'	=>	'fields['.$key.'][post_type]',
-					'value'	=>	$field['post_type'],
-					'choices'	=>	$choices,
-					'multiple'	=>	'1',
-				));
-				
-				?>
-			</td>
-		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
-			<td class="label">
-				<label><?php _e("Filter from Taxonomy",'acf'); ?></label>
-			</td>
-			<td>
-				<?php 
-				$choices = array(
-					'' => array(
-						'all' => __("All",'acf')
-					)
-				);
-				$choices = array_merge($choices, $this->parent->get_taxonomies_for_select());
-				$this->parent->create_field(array(
-					'type'	=>	'select',
-					'name'	=>	'fields['.$key.'][taxonomy]',
-					'value'	=>	$field['taxonomy'],
-					'choices' => $choices,
-					'optgroup' => true,
-					'multiple'	=>	'1',
-				));
-				?>
-			</td>
-		</tr>
+		
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
 				<label><?php _e("Maximum posts",'acf'); ?></label>

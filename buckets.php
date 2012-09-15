@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.1.4
+Version: 0.1.5
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -17,7 +17,7 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
-$version = '0.1.3';
+$version = '0.1.5';
 add_action('init', 'init');
 add_action('admin_menu', 'admin_menu');
 add_action( 'admin_head', 'admin_head' );
@@ -101,9 +101,10 @@ function admin_menu()
 
 function admin_head()
 {
-	if ($GLOBALS['post_type'] == 'buckets')
+	global $version;
+	wp_enqueue_style('bucket-icons', plugins_url('',__FILE__) . '/css/icons.css?v=' . $version);
+	if (isset($GLOBALS['post_type']) && $GLOBALS['post_type'] == 'buckets')
 	{
-		global $version;
 		wp_enqueue_script('clipboard', plugins_url('',__FILE__) . '/js/zclip.js?v=' . $version);
 		wp_enqueue_script('buckets', plugins_url('',__FILE__) . '/js/buckets.js?v=' . $version);
 		wp_enqueue_style('buckets', plugins_url('',__FILE__) . '/css/buckets.css?v=' . $version);
@@ -141,7 +142,7 @@ function manage_buckets()
 
 function buckets_shortcode($arg) 
 {
-	$return = get_bucket($arg['id']);
+	$return = get_bucket($arg['id'], true);
 	return $return;
 }
 
@@ -162,6 +163,7 @@ function shortcode_meta_box()
 
 
 
+
 /*--------------------------------------------------------------------------------------
 *
 *	get_bucket
@@ -169,10 +171,11 @@ function shortcode_meta_box()
 *
 *	@author Matthew Restorff
 *	@params id - post id of the bucket element
+*	@params sc - if called from a shortcode the content needs to be put into a variable to output in the correct place
 * 
 *-------------------------------------------------------------------------------------*/
 
-function get_bucket($id)
+function get_bucket($id, $sc = false)
 {
 
 	$post = wp_get_single_post($id);
@@ -180,10 +183,9 @@ function get_bucket($id)
 
 	//If ACF is Active perform some wizardry
 	if (is_plugin_active('advanced-custom-fields/acf.php')) {
-		//echo 'hi'; print_r(get_field('buckets', $id));
 		while(has_sub_field("buckets", $id)) {
 			$layout = get_row_layout();
-		    ob_start();
+		    if ($sc == true) { ob_start(); }
 
 		    $file = str_replace(' ', '', $layout) . '.php';
 		    $path = (file_exists(TEMPLATEPATH . '/buckets/' . $file)) ? TEMPLATEPATH . '/buckets/' . $file : WP_PLUGIN_DIR . '/buckets/templates/' . $file;
@@ -193,9 +195,9 @@ function get_bucket($id)
 		    	return 'Bucket template does not exist.';
 		    }
 
-		    $return .= ob_get_contents();
+		    if ($sc == true) { $return .= ob_get_contents(); }
 
-		    ob_end_clean();
+		    if ($sc == true) { ob_end_clean(); }
 		}
 	}
     return $return;

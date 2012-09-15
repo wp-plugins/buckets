@@ -1,0 +1,4 @@
+/* WP Admin Icons */
+#menu-posts-buckets .wp-menu-image { width: 28px; height: 28px; background: url(../img/bucket-16x16.png) no-repeat 6px 6px !important; }
+#menu-posts-buckets:hover .wp-menu-image, #menu-posts-buckets.wp-has-current-submenu .wp-menu-image { background: url(../img/bucket-hover-16x16.png) no-repeat 6px 6px !important; }
+#icon-edit.icon32-posts-buckets { background: url(../img/bucket-32x32.png) no-repeat; }
