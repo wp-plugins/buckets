@@ -29,6 +29,16 @@ This plugin is made for developers who like to make their client's lives easier 
 
 == Changelog ==
 
+= 0.1.6 = 
+[Added] - Automatically setups default fields for ACF when installed
+[Fixed] - Minor Bug Fixes
+
+= 0.1.5 =
+[Added] - Buckets Area field - The beginning of an easier way for creating your "sidebars". 
+[Fixed] - Updated to include new ACF has_sub_field function
+[Fixed] - Bug with template output
+[Fixed] - Bucket icon not displaying
+
 = 0.1.4 =
 [Fixed] - Updated plugin and field to work with newest ACF changes. 
-[Fixed] - Minor Bug Fixes
+[Fixed] - Minor Bug Fixeschange_log.txt	935 B	9/14/2012 10:58:00 PM
