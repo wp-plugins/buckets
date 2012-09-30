@@ -28,6 +28,8 @@ This plugin is made for developers who like to make their client's lives easier 
 
 
 == Changelog ==
+= 0.1.7 = 
+[Added] - Added a TinyMCE button that will let you select a bucket and it will automatically insert the shortcode for you. Must faster for editing your content and easier on your clients. 
 
 = 0.1.6 = 
 [Added] - Automatically setups default fields for ACF when installed

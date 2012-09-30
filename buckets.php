@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.1.6
+Version: 0.1.7
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -16,9 +16,8 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
-$version = '0.1.6';
+$version = '0.1.7';
 add_action('init', 'init');
-add_action('admin_menu', 'admin_menu');
 add_action( 'admin_head', 'admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
 
@@ -34,6 +33,7 @@ add_shortcode( 'bucket', 'buckets_shortcode' );
 function init() 
 {
 
+	// Setup Buckets
 	$labels = array(
 	    'name' => __( 'Buckets', 'buckets' ),
 		'singular_name' => __( 'Bucket', 'buckets' ),
@@ -61,6 +61,11 @@ function init()
 		),
 		'show_in_menu'	=> true,
 	));
+
+	// Create TinyMCE Button
+	create_tinymce_button();
+
+
 	
 	// Make Sure ACF is loaded
 	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
@@ -78,30 +83,35 @@ function init()
 
 /*--------------------------------------------------------------------------------------
 *
-*	admin_menu
+*	create_tinymce_button
 *
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
 
-function admin_menu()
-{
-	//add_submenu_page('edit.php?post_type=buckets', __('Manage','acf'), __('Manage','acf'), 'manage_options','manage-buckets', 'manage_buckets');
+function create_tinymce_button()
+{	
+	// Don't bother doing this stuff if the current user lacks permissions
+   if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') )
+     return;
+ 
+   // Add only in Rich Editor mode
+   if ( get_user_option('rich_editing') == 'true') {
+      add_filter( 'mce_external_plugins', 'add_plugin' );
+      add_filter( 'mce_buttons', 'register_button' );
+   }
 }
 
-
-/*--------------------------------------------------------------------------------------
-*
-*	manage_buckets
-*
-*	@author Matthew Restorff
-* 
-*-------------------------------------------------------------------------------------*/
-
-function manage_buckets()
-{
-	//include('admin/manage.php');
+function add_plugin($plugin_array) {   
+   $plugin_array['buckets'] = plugins_url() . '/buckets/js/tinymce/bucketshortcode.js';
+   return $plugin_array;
 }
+
+function register_button($buttons) {
+   array_push( $buttons, "seperator", "buckets" );
+   return $buttons;
+}
+
 
 
 
