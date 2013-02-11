@@ -1,0 +1,7 @@
+html { margin: 0 !important; padding: 0 !important; }
+#adminmenuback, #adminmenuwrap, #wpadminbar, #screen-meta, #screen-options-link-wrap, #footer { display: none !important; }
+#wpcontent { margin: 0px 20px 0 20px !important; }
+#postbox-container-1, #postbox-container-1, #postbox-container-1 .postbox { margin-right: -150px !important; width: 119px !important; min-width: 50px !important; }
+#poststuff #post-body.columns-2 { margin-right: 150px !important; }
+#delete-action a { color: red; display: none; }
+#delete-action a:hover { background: red; color: #fff; }

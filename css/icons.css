@@ -2,3 +2,201 @@
 #menu-posts-buckets .wp-menu-image { width: 28px; height: 28px; background: url(../img/bucket-16x16.png) no-repeat 6px 6px !important; }
 #menu-posts-buckets:hover .wp-menu-image, #menu-posts-buckets.wp-has-current-submenu .wp-menu-image { background: url(../img/bucket-hover-16x16.png) no-repeat 6px 6px !important; }
 #icon-edit.icon32-posts-buckets { background: url(../img/bucket-32x32.png) no-repeat; }
+.new-bucket { float: left; margin-top: 10px !important; }
+
+
+
+/*---------------------------------------------------------------------------------------------
+*
+*	ACF Buckets
+*
+*---------------------------------------------------------------------------------------------*/
+
+.acf_buckets {
+	position: relative;
+	overflow: visible;
+}
+
+.acf_buckets .relationship_left {
+	width: 50%;
+	float: left;
+}
+
+.acf_buckets .relationship_right {
+	width: 50%;
+	float: left;
+}
+
+.acf_buckets .relationship_label {
+	font-size: 12px;
+	font-family: sans-serif;
+	color: #999;
+	position: absolute;
+	margin-top: 5px;
+	margin-left: 10px;
+}
+
+.acf_buckets .widefat {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.acf_buckets .widefat th {
+	border-bottom: 0 none;
+}
+
+
+.acf_buckets .relationship_search {
+	margin: 0;
+	font-size: 12px;
+	line-height: 13px;
+	border-radius: 13px;
+	font-family: sans-serif;
+	padding: 5px 9px !important;
+}
+
+.acf_buckets .relationship_list {
+	background: #fff;
+	position: relative;
+	overflow: scroll;	
+	height: 150px;
+	border: #DFDFDF solid 1px;
+	border-top-width: 0;
+}
+
+.acf_buckets .relationship_list li.hide {
+	background: #f8f8f8;
+}
+
+.acf_buckets .relationship_list li.hide a {
+	cursor: default;
+	color: #21759B !important;
+	opacity: 0.5;
+	background: transparent !important;
+}
+
+.acf_buckets .relationship_list li {
+	border-bottom: #f8f8f8 solid 1px;
+	position: relative;
+}
+
+.acf_buckets .relationship_list li a {
+	display: block;
+	position: relative;
+	padding: 7px 9px;
+	text-decoration: none;
+}
+
+.acf_buckets .relationship_list li a .relationship-item-info {
+	color: #CCC;
+	display: none;
+	text-transform: uppercase;
+	float: right;
+	font-size: 11px;
+}
+
+.acf_buckets .relationship_list li:hover a .relationship-item-info {
+	padding-right: 40px;
+	color: #999;
+}
+
+.acf_buckets .relationship_list li.hide:hover a .relationship-item-info {
+	padding-right: 0;
+	color: #CCC;
+}
+
+.acf_buckets .relationship_list li a:hover,
+.acf_buckets .relationship_list li:hover>a,
+.acf_buckets .relationship_list li a:focus {
+	background: #eaf2fa;
+	color: #000;
+	text-indent: 24px;
+}
+
+.acf_buckets .relationship_list li.hide:hover a{
+	text-indent: 0px;
+}
+
+.acf_buckets .relationship_right .relationship_list {
+	margin-left: 10px;
+	height: 193px;
+	border-top-width:1px; 
+}
+
+.acf_buckets .relationship_list li a .add {
+	width: 16px;
+	height: 16px;
+	background: url(../img/button_add.png) 0 0 no-repeat;
+	position: absolute;
+	top: 2px;
+	left: 9px;
+	cursor: pointer;
+	margin: 5px 9px 0 0;
+	display: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	border-radius: 8px;
+}
+
+.acf_buckets .relationship_list li a:hover .add, .acf_buckets .relationship_list li:hover>a .add {
+	display: block;
+}
+
+.acf_buckets .relationship_list li.hide a:hover .add {
+	display: none;
+}
+
+.acf_buckets .relationship_list li a .add:hover {
+	background-position: 0 100%;
+}
+
+.acf_buckets .relationship_list li a .remove {
+	width: 16px;
+	height: 16px;
+	background: url(../img/button_remove.png) 0 0 no-repeat;
+	position: absolute;
+	top: 2px;
+	left: 9px;
+	cursor: pointer;
+	margin: 5px 9px 0 0;
+	display: none;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+	border-radius: 8px;
+}
+
+.acf_buckets .relationship_list li a:hover .remove {
+	display: block;
+}
+
+.acf_buckets .relationship_list li a .remove:hover {
+	background-position: 0 100%;
+}
+
+.acf_buckets .relationship_right .relationship_list li a {
+	cursor: move;
+} 
+
+.acf_buckets .load-more .acf-loading {
+	padding: 0;
+	box-shadow: none;
+	background-color: transparent;
+}
+
+.acf_buckets.no-results .load-more {
+	display: none;
+}
+
+.acf_buckets .edit { display: none; min-width: 16px; min-height: 16px; 
+	background-image: -moz-linear-gradient(top, #FFFFFF 0%, #eaeaea 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #eaeaea));
+	background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #eaeaea 100%);
+	background-image: linear-gradient(to bottom, #FFFFFF 0%, #eaeaea 100%);
+	position: absolute; top: 5px; right: 9px;
+	font-size: 10px;
+	box-shadow: 0 0 2px #222;
+	padding: 2px 5px;
+	cursor: pointer;
+	z-index: 2;
+}
+.acf_buckets .edit:hover { color: #21759b; font-weight: bold; }
+.acf_buckets .relationship_list li:hover .edit { display: block; }
+.acf_buckets .relationship_list li.hide .edit { display: none; }

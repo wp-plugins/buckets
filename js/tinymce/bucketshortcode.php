@@ -7,7 +7,7 @@ require( $file . "/wp-load.php");
 <!doctype html>
 <html>
 <head>
-	<title>Bucket Shortcodes</title>
+	<title>Bucket Shortcode</title>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script>
@@ -35,7 +35,7 @@ require( $file . "/wp-load.php");
 			$('#wp-link-submit').click(function(){
 				var id = $('.selected .item-info').html();
 				var title = $('.selected .item-title').html();
-				tinyMCE.execCommand('mceInsertContent',false,'[buckets id="' + id + '" title="' + title + '"]');
+				tinyMCE.execCommand('mceInsertContent',false,'[bucket id="' + id + '" title="' + title + '"]');
 				tinyMCEPopup.close();
 			});
 

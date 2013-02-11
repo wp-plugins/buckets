@@ -28,6 +28,15 @@ This plugin is made for developers who like to make their client's lives easier 
 
 
 == Changelog ==
+= 0.1.8 = 
+[Fixed] - TinyMCE shortcode was inserting incorrectly
+[Fixed] - Uploaded deprecated wp_get_single_post function to get_post
+[Fixed] - Adjusted Buckets Area field styles
+[Fixed] - Bucket Area field output to be slightly more efficient. 
+[Fixed] - Added wpautop function to content output
+[Added] - You can now add new Buckets from the Buckets Sidebar field! Now you can edit all your content from a single page. 
+[Fixed] - Fixed plugin initilization function to prevent compatibility issues. 
+
 = 0.1.7 = 
 [Added] - Added a TinyMCE button that will let you select a bucket and it will automatically insert the shortcode for you. Must faster for editing your content and easier on your clients. 
 

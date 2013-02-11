@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.1.7
+Version: 0.1.8
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -16,9 +16,9 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
-$version = '0.1.7';
-add_action('init', 'init');
-add_action( 'admin_head', 'admin_head' );
+$bucket_version = '0.1.8';
+add_action('init', 'buckets_init');
+add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
 
 
@@ -30,7 +30,7 @@ add_shortcode( 'bucket', 'buckets_shortcode' );
 * 
 *-------------------------------------------------------------------------------------*/
 
-function init() 
+function buckets_init() 
 {
 
 	// Setup Buckets
@@ -74,7 +74,7 @@ function init()
 		remove_post_type_support( 'buckets', 'editor' );
 		load_first();
 		register_field('Buckets_field', WP_PLUGIN_DIR . '/buckets/fields/buckets.php');
-		create_field_groups();
+		create_bucket_field_groups();
 	}
 
 }
@@ -108,7 +108,7 @@ function add_plugin($plugin_array) {
 }
 
 function register_button($buttons) {
-   array_push( $buttons, "seperator", "buckets" );
+   array_push( $buttons, "|", "buckets" );
    return $buttons;
 }
 
@@ -124,8 +124,9 @@ function register_button($buttons) {
 * 
 *-------------------------------------------------------------------------------------*/
 
-function create_field_groups()
+function create_bucket_field_groups()
 {
+
 
 	$arr = (array)get_page_by_title('Buckets', OBJECT, 'acf');
 
@@ -141,7 +142,7 @@ function create_field_groups()
 		$post_id = wp_insert_post($buckets);
 
 		add_post_meta($post_id, '_edit_last', '1');
-		add_post_meta($post_id, 'field_500f64ec049a0', 'a:10:{s:3:"key";s:19:"field_500f64ec049a0";s:5:"label";s:7:"Buckets";s:4:"name";s:7:"buckets";s:4:"type";s:16:"flexible_content";s:12:"instructions";s:0:"";s:8:"required";s:1:"0";s:7:"layouts";a:1:{i:0;a:4:{s:5:"label";s:13:"Visual Editor";s:4:"name";s:13:"visual_editor";s:7:"display";s:5:"table";s:10:"sub_fields";a:1:{i:0;a:7:{s:5:"label";s:7:"Content";s:4:"name";s:7:"content";s:4:"type";s:7:"wysiwyg";s:7:"toolbar";s:4:"full";s:12:"media_upload";s:3:"yes";s:3:"key";s:19:"field_50402dcb0fb1b";s:8:"order_no";s:1:"0";}}}}s:10:"sub_fields";a:1:{i:0;a:1:{s:3:"key";s:19:"field_50402dbe9787c";}}s:12:"button_label";s:12:"+ Add Bucket";s:8:"order_no";s:1:"0";}');
+		add_post_meta($post_id, 'field_bucketskey777', 'a:10:{s:3:"key";s:19:"field_bucketskey777";s:5:"label";s:7:"Buckets";s:4:"name";s:7:"buckets";s:4:"type";s:16:"flexible_content";s:12:"instructions";s:0:"";s:8:"required";s:1:"0";s:7:"layouts";a:1:{i:0;a:4:{s:5:"label";s:13:"Visual Editor";s:4:"name";s:13:"visual_editor";s:7:"display";s:5:"table";s:10:"sub_fields";a:1:{i:0;a:7:{s:5:"label";s:7:"Content";s:4:"name";s:7:"content";s:4:"type";s:7:"wysiwyg";s:7:"toolbar";s:4:"full";s:12:"media_upload";s:3:"yes";s:3:"key";s:19:"field_50402dcb0fb1b";s:8:"order_no";s:1:"0";}}}}s:10:"sub_fields";a:1:{i:0;a:1:{s:3:"key";s:19:"field_50402dbe9787c";}}s:12:"button_label";s:12:"+ Add Bucket";s:8:"order_no";s:1:"0";}');
 		add_post_meta($post_id, 'allorany', 'all');
 		add_post_meta($post_id, 'rule', 'a:4:{s:5:"param";s:9:"post_type";s:8:"operator";s:2:"==";s:5:"value";s:7:"buckets";s:8:"order_no";s:1:"0";}');
 		add_post_meta($post_id, 'position', 'normal');
@@ -159,12 +160,14 @@ function create_field_groups()
 		$post_id = wp_insert_post($sidebars);
 
 		add_post_meta($post_id, '_edit_last', '1');
-		add_post_meta($post_id, 'field_500f64ec049a0', 'a:8:{s:3:"key";s:19:"field_500f653c5e213";s:5:"label";s:7:"Sidebar";s:4:"name";s:7:"sidebar";s:4:"type";s:13:"buckets_field";s:12:"instructions";s:0:"";s:8:"required";s:1:"0";s:3:"max";s:0:"";s:8:"order_no";s:1:"0";}');
+		add_post_meta($post_id, 'field_bucketskey778', 'a:8:{s:5:"label";s:7:"Sidebar";s:4:"name";s:7:"sidebar";s:4:"type";s:13:"buckets_field";s:12:"instructions";s:0:"";s:8:"required";s:1:"0";s:3:"max";s:0:"";s:3:"key";s:19:"field_bucketskey778";s:8:"order_no";s:1:"0";}');
 		add_post_meta($post_id, 'allorany', 'all');
 		add_post_meta($post_id, 'rule', 'a:4:{s:5:"param";s:9:"post_type";s:8:"operator";s:2:"==";s:5:"value";s:4:"page";s:8:"order_no";s:1:"0";}');
 		add_post_meta($post_id, 'position', 'normal');
 		add_post_meta($post_id, 'layout', 'no_box');
 		add_post_meta($post_id, 'hide_on_screen', '');
+	} else {
+		// The Buckets Field group already exists
 	}
 
 }
@@ -181,20 +184,36 @@ function create_field_groups()
 * 
 *-------------------------------------------------------------------------------------*/
 
-function admin_head()
+function buckets_admin_head()
 {
-	global $version;
-	wp_enqueue_style('bucket-icons', plugins_url('',__FILE__) . '/css/icons.css?v=' . $version);
+	global $bucket_version;
+
 	if (isset($GLOBALS['post_type']) && $GLOBALS['post_type'] == 'buckets')
 	{
-		wp_enqueue_script('clipboard', plugins_url('',__FILE__) . '/js/zclip.js?v=' . $version);
-		wp_enqueue_script('buckets', plugins_url('',__FILE__) . '/js/buckets.js?v=' . $version);
-		wp_enqueue_style('buckets', plugins_url('',__FILE__) . '/css/buckets.css?v=' . $version);
-		if ($GLOBALS['pagenow'] == 'post.php')
+		wp_enqueue_script('clipboard', plugins_url('',__FILE__) . '/js/zclip.js?v=' . $bucket_version);
+		wp_enqueue_style('buckets', plugins_url('',__FILE__) . '/css/buckets.css?v=' . $bucket_version);
+		if ($GLOBALS['pagenow'] == 'post.php' && !isset($_GET['popup']))
 		{
 			add_meta_box('buckets-shortcode', 'Shortcode', 'shortcode_meta_box', 'buckets', 'normal', 'high');
 		}
+		
 	}
+
+	wp_enqueue_style('bucket-icons', plugins_url('',__FILE__) . '/css/icons.css?v=' . $bucket_version);
+	wp_enqueue_script('buckets', plugins_url('',__FILE__) . '/js/buckets.js?v=' . $bucket_version);
+	
+	if (isset($_GET['popup'])){
+		wp_enqueue_style('buckets-popup', plugins_url('',__FILE__) . '/css/popup.css?v=' . $bucket_version);
+		wp_enqueue_script('buckets-popup', plugins_url('',__FILE__) . '/js/popup.js?v=' . $bucket_version);
+	}
+	
+	// The WP Thickbox dimensions are hard coded into the media-upload. With this we strip it and make our own. 
+	wp_deregister_script( 'media-upload' );
+	wp_enqueue_script(
+	    'media-upload', 
+	    plugins_url('',__FILE__) . '/js/media-upload.js?v=' . $bucket_version, 
+	    array( 'thickbox' )
+	);
 }
 
 
@@ -209,7 +228,7 @@ function admin_head()
 
 function buckets_shortcode($arg) 
 {
-	$return = get_bucket($arg['id'], true);
+	$return = get_bucket($arg['id']);
 	return $return;
 }
 
@@ -242,28 +261,27 @@ function shortcode_meta_box()
 * 
 *-------------------------------------------------------------------------------------*/
 
-function get_bucket($id, $sc = false)
+function get_bucket($id)
 {
 
-	$post = wp_get_single_post($id);
-	$return = ($post->post_content != '') ? $post->post_content : '';
+	$post = get_post($id);
+	$return = ($post->post_content != '') ? wpautop($post->post_content) : '';
 
 	//If ACF is Active perform some wizardry
 	if (is_plugin_active('advanced-custom-fields/acf.php')) {
 		while(has_sub_field("buckets", $id)) {
 			$layout = get_row_layout();
-		    if ($sc == true) { ob_start(); }
+		    ob_start(); 
 
 		    $file = str_replace(' ', '', $layout) . '.php';
 		    $path = (file_exists(TEMPLATEPATH . '/buckets/' . $file)) ? TEMPLATEPATH . '/buckets/' . $file : WP_PLUGIN_DIR . '/buckets/templates/' . $file;
 		    if (file_exists($path)) {
 		    	include($path);
 		    } else {
-		    	return 'Bucket template does not exist.';
+		    	echo 'Bucket template does not exist.'; 
 		    }
 
-		    if ($sc == true) { $return .= ob_get_contents(); }
-		    if ($sc == true) { ob_end_clean(); }
+		    $return = ob_get_clean(); 
 		}
 	}
     return $return;
@@ -292,8 +310,4 @@ function load_first()
 		update_option('active_plugins', $active_plugins);
 	}
 }
-
-
-
-
 ?>

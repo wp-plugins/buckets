@@ -18,9 +18,9 @@ class Buckets_field extends acf_Field
     	parent::__construct($parent);
     	
     	$this->name = 'buckets_field';
-		$this->title = __("Buckets Area",'acf');
+		$this->title = __("Buckets Sidebar",'acf');
 		
-		add_action('wp_ajax_acf_get_relationship_results', array($this, 'acf_get_relationship_results'));
+		add_action('wp_ajax_acf_get_bucket_results', array($this, 'acf_get_bucket_results'));
    	}
    	
    	
@@ -34,23 +34,21 @@ class Buckets_field extends acf_Field
 	* 
 	*-------------------------------------------------------------------------------------*/
 	
-   	function acf_get_relationship_results()
+   	function acf_get_bucket_results()
    	{
-
    		// vars
 		$options = array(
 			'post_type'	=>	'buckets',
-			'taxonomy' => 'all',
 			'posts_per_page' => 10,
 			'paged' => 0,
 			'orderby' => 'title',
 			'order' => 'ASC',
 			'post_status' => array('publish', 'private', 'draft', 'inherit', 'future'),
 			'suppress_filters' => false,
-			's' => ''
+			's' => '',
 		);
 		$ajax = isset( $_POST['action'] ) ? true : false;
-		
+
 		
 		// override options with posted values
 		if( $ajax )
@@ -59,85 +57,41 @@ class Buckets_field extends acf_Field
 		}
 		
 		
-		// convert types
-		$options['post_type'] = explode(',', $options['post_type']);
-		$options['taxonomy'] = explode(',', $options['taxonomy']);
-		
-		
-		// load all post types by default
-		if( !$options['post_type'] || !is_array($options['post_type']) || $options['post_type'][0] == "" )
+		// search
+		if( $options['s'] )
 		{
-			$options['post_type'] = get_post_types( array('public' => true) );
+			$options['like_title'] = $options['s'];
+			
+			add_filter( 'posts_where', array($this, 'posts_where'), 10, 2 );
 		}
 		
-		
-		// attachment doesn't work if it is the only item in an array???
-		if( is_array($options['post_type']) && count($options['post_type']) == 1 )
-		{
-			$options['post_type'] = $options['post_type'][0];
-		}
-		
-		
-		// create tax queries
-		if( ! in_array('all', $options['taxonomy']) )
-		{
-			// vars
-			$taxonomies = array();
-			$options['tax_query'] = array();
-			
-			foreach( $options['taxonomy'] as $v )
-			{
-				
-				// find term (find taxonomy!)
-				// $term = array( 0 => $taxonomy, 1 => $term_id )
-				$term = explode(':', $v); 
-				
-				
-				// validate
-				if( !is_array($term) || !isset($term[1]) )
-				{
-					continue;
-				}
-				
-				
-				// add to tax array
-				$taxonomies[ $term[0] ][] = $term[1];
-				
-			}
-			
-			
-			// now create the tax queries
-			foreach( $taxonomies as $k => $v )
-			{
-				$options['tax_query'][] = array(
-					'taxonomy' => $k,
-					'field' => 'id',
-					'terms' => $v,
-				);
-			}
-		}
-		
-		unset( $options['taxonomy'] );
+		unset( $options['s'] );
 		
 		
 		// load the posts
 		$posts = get_posts( $options );
-		
+
 		if( $posts )
 		{
 			foreach( $posts  as $post )
 			{
+				// right aligned info
+				$title = '<span class="relationship-item-info">';
+				
+					$title .= $post->post_type;
+					
+				$title .= '</span>';
+				
 				// find title. Could use get_the_title, but that uses get_post(), so I think this uses less Memory
-				$title = apply_filters( 'the_title', $post->post_title, $post->ID );
-
+				$title .= apply_filters( 'the_title', $post->post_title, $post->ID );
 
 				// status
-				if($post->post_status == "private" || $post->post_status == "draft")
+				if($post->post_status != "publish")
 				{
 					$title .= " ($post->post_status)";
 				}
 				
-				echo '<li><a href="javascript:;" data-post_id="' . $post->ID . '">' . $title . '<span class="add"></span></a></li>';
+				echo '<li><span class="edit" data-url="' . get_admin_url() . 'post.php?post=' . $post->ID . '&action=edit&popup=true&TB_iframe=1">Edit</span><a href="' . get_permalink($post->ID) . '" data-post_id="' . $post->ID . '">' . $title .  '<span class="add"></span></a></li>';
 			}
 		}
 		
@@ -189,7 +143,6 @@ class Buckets_field extends acf_Field
 		$defaults = array(
 			'post_type'	=>	'buckets',
 			'max' 		=>	-1,
-			'taxonomy' 	=>	array('all'),
 		);
 		
 		$field = array_merge($defaults, $field);
@@ -205,15 +158,9 @@ class Buckets_field extends acf_Field
 			$field['max'] = 9999;
 		}
 		
-		
-		// load all post types by default
-		if( !$field['post_type'] || !is_array($field['post_type']) || $field['post_type'][0] == "" )
-		{
-			$field['post_type'] = get_post_types( array('public' => true) );
-		}
 		$field['type'] = 'relationship';
 		?>
-<div class="acf_relationship" data-max="<?php echo $field['max']; ?>" data-s="" data-paged="1" data-post_type="buckets" data-taxonomy="<?php echo implode(',', $field['taxonomy']); ?>">
+<div class="acf_buckets" data-max="<?php echo $field['max']; ?>" data-s="" data-paged="1" data-post_type="buckets">
 	
 	<!-- Hidden Blank default value -->
 	<input type="hidden" name="<?php echo $field['name']; ?>" value="" />
@@ -221,6 +168,7 @@ class Buckets_field extends acf_Field
 	<!-- Template for value -->
 	<script type="text/html" class="tmpl-li">
 	<li>
+		<span class="edit" data-url="<?php echo get_admin_url() ?>post.php?post={post_id}&action=edit&popup=true&TB_iframe=1">Edit</span>
 		<a href="#" data-post_id="{post_id}">{title}<span class="remove"></span></a>
 		<input type="hidden" name="<?php echo $field['name']; ?>[]" value="{post_id}" />
 	</li>
@@ -228,6 +176,7 @@ class Buckets_field extends acf_Field
 	<!-- / Template for value -->
 	
 	<!-- Left List -->
+
 	<div class="relationship_left">
 		<table class="widefat">
 			<thead>
@@ -245,6 +194,7 @@ class Buckets_field extends acf_Field
 				<div class="acf-loading"></div>
 			</li>
 		</ul>
+		<a href="<?php echo bloginfo('url'); ?>/wp-admin/post-new.php?post_type=buckets&popup=true&TB_iframe=1" title="New Bucket" class="button-primary new-bucket thickbox">Add New</a>
 	</div>
 	<!-- /Left List -->
 	
@@ -269,6 +219,7 @@ class Buckets_field extends acf_Field
 				}
 				
 				echo '<li>
+					<span class="edit" data-url="' . get_admin_url() . 'post.php?post=' . $post->ID . '&action=edit&popup=true&TB_iframe=1">Edit</span>
 					<a href="javascript:;" class="" data-post_id="' . $post->ID . '">' . $title . '<span class="remove"></span></a>
 					<input type="hidden" name="' . $field['name'] . '[]" value="' . $post->ID . '" />
 				</li>';
@@ -277,9 +228,10 @@ class Buckets_field extends acf_Field
 			
 		?>
 		</ul>
+		
 	</div>
 	<!-- / Right List -->
-	
+	<div style="clear: both;"></div>
 </div>
 
 
@@ -329,48 +281,6 @@ class Buckets_field extends acf_Field
 		<?php
 	}
 	
-	/*--------------------------------------------------------------------------------------
-	*
-	*	get_value_for_api
-	*
-	*	@author Elliot Condon
-	*	@since 3.0.0
-	* 
-	*-------------------------------------------------------------------------------------*/
-	
-	// function get_value_for_api($post_id, $field)
-	// {
-	// 	// vars
-	// 	$value = parent::get_value($post_id, $field);
-	// 	$return = false;
-		
-	// 	if(!$value || $value == "")
-	// 	{
-	// 		return $return;
-	// 	}
-		
-	// 	$value = explode(',', $value);
-		
-	// 	if(is_array($value))
-	// 	{
-	// 		$buckets = array();
-	// 		foreach($value as $v)
-	// 		{
-	// 			$buckets[] = get_post($v);
-	// 		}
-	// 	}
-	// 	else
-	// 	{
-	// 		$buckets = array(get_post($value));
-	// 	}
-
-	// 	foreach ($buckets as $row) {
-	// 		$return .= get_bucket($row->ID);
-	// 	}
-
-	// 	return $return;
-	// }
-
 
 	/*--------------------------------------------------------------------------------------
 	*
@@ -480,12 +390,11 @@ class Buckets_field extends acf_Field
 			// create array to hold value data
 			$ordered_posts[ $post->ID ] = $post;
 		}
-		
-		
+				
 		// override value array with attachments
 		foreach( $value as $k => $v)
 		{
-			$buckets = get_bucket($v);
+			$buckets .= get_bucket($v);
 			$value[ $k ] = $ordered_posts[ $v ];
 
 		}

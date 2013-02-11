@@ -6,7 +6,7 @@
                    file : url + '/bucketshortcode.php',
                    width : 480,
                    height: 315,
-                   title : 'Bucket Shortcodes',
+                   title : 'Bucket Shortcode',
                    inline : 1
            }, {
                    plugin_url : url
