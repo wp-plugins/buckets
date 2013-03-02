@@ -1,6 +1,6 @@
 === Buckets ===
 Contributors: Matthew Restorff
-Tags: widgets, buckets, acf, advanced custom fields, custom, field
+Tags: widgets, buckets, acf, advanced custom fields, custom, field, widgets alternative, sidebar
 Requires at least: 3.0
 Tested up to: 3.4.1
 Stable tag: 3.4.1
@@ -19,6 +19,10 @@ You can even create a fully modular site using sidebar areas and just throwing b
 
 This plugin is made for developers who like to make their client's lives easier (and their own). 
 
+Documentation is available on google docs: https://docs.google.com/document/d/1fDhqmtKWTy-0oxTP8GUg7wdhv-VULNoBFkJbLvKNdzo/edit?usp=sharing
+
+Video docs coming soon!
+
 
 == Installation ==
 
@@ -26,8 +30,20 @@ This plugin is made for developers who like to make their client's lives easier 
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Read the documentation to learn how to create buckets. 
 
+Read the docs for more info: https://docs.google.com/document/d/1fDhqmtKWTy-0oxTP8GUg7wdhv-VULNoBFkJbLvKNdzo/edit?usp=sharing
+
+
+== Other Notes ==
+
+You can view the documentation here: https://docs.google.com/document/d/1fDhqmtKWTy-0oxTP8GUg7wdhv-VULNoBFkJbLvKNdzo/edit?usp=sharing
+
+Videos coming soon
+
 
 == Changelog ==
+= 0.1.9.1 =
+[Added] - Documentation 
+
 = 0.1.9 = 
 [Fixed] - Changed Shortcode "Copy to Clipboard" feature to just use a link. The shortcode text is now selectable (for none flash browsers). 
 [Added] - Bucket type displays on Bucket Area field. 
