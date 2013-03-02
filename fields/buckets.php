@@ -70,15 +70,17 @@ class Buckets_field extends acf_Field
 		
 		// load the posts
 		$posts = get_posts( $options );
-
 		if( $posts )
 		{
 			foreach( $posts  as $post )
 			{
 				// right aligned info
+				$layout = false;
 				$title = '<span class="relationship-item-info">';
-				
-					$title .= $post->post_type;
+					while(has_sub_field('buckets', $post->ID)){
+						$layout = str_replace('_', ' ', get_row_layout());
+					}
+					$title .= $layout;
 					
 				$title .= '</span>';
 				
@@ -91,7 +93,7 @@ class Buckets_field extends acf_Field
 					$title .= " ($post->post_status)";
 				}
 				
-				echo '<li><span class="edit" data-url="' . get_admin_url() . 'post.php?post=' . $post->ID . '&action=edit&popup=true&TB_iframe=1">Edit</span><a href="' . get_permalink($post->ID) . '" data-post_id="' . $post->ID . '">' . $title .  '<span class="add"></span></a></li>';
+				echo '<li><span class="edit" data-url="' . get_admin_url() . 'post.php?post=' . $post->ID . '&action=edit&popup=true&KeepThis=true&TB_iframe=true&height=200&width=200">Edit</span><a href="' . get_permalink($post->ID) . '" data-post_id="' . $post->ID . '">' . $title .  '<span class="add"></span></a></li>';
 			}
 		}
 		

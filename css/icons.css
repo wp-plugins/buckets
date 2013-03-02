@@ -89,7 +89,7 @@
 
 .acf_buckets .relationship_list li a .relationship-item-info {
 	color: #CCC;
-	display: none;
+	display: block;
 	text-transform: uppercase;
 	float: right;
 	font-size: 11px;

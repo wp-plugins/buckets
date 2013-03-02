@@ -11,12 +11,11 @@ jQuery(document).ready(function($){
 
 	$('.acf_buckets span.edit').live('click', function(){
 		var url = $(this).attr('data-url');
-		console.log(url);
 		tb_show('Edit Bucket', url);
 	});
 
 	if (jQuery().zclip){
-	    $('.bucket-shortcode').zclip({
+	    $('.bucket-shortcode #copy').zclip({
 	        path:'../wp-content/plugins/buckets/js/ZeroClipboard.swf',
 	        copy: $('#cody').text(),
 	        afterCopy:function(){
@@ -31,8 +30,10 @@ jQuery(document).ready(function($){
 function update_buckets(){
     var div = jQuery('.acf_buckets');
     if( div.length == 0 ) { return; }
-    acf.buckets_update_results( div );
-    tb_remove();
+    setTimeout(function(){
+    	acf.buckets_update_results( div );
+    	tb_remove()
+    }, 2000);
 }
 
 /*

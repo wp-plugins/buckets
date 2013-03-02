@@ -28,6 +28,12 @@ This plugin is made for developers who like to make their client's lives easier 
 
 
 == Changelog ==
+= 0.1.9 = 
+[Fixed] - Changed Shortcode "Copy to Clipboard" feature to just use a link. The shortcode text is now selectable (for none flash browsers). 
+[Added] - Bucket type displays on Bucket Area field. 
+[Fixed] - Improved Add and Edit functions of the Buckets Area field. No longer saves as draft. 
+[Fixed] - Cleaned up minor styles.
+
 = 0.1.8 = 
 [Fixed] - TinyMCE shortcode was inserting incorrectly
 [Fixed] - Uploaded deprecated wp_get_single_post function to get_post

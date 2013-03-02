@@ -7,5 +7,6 @@
 			<span class="bucket-shortcode-tooltip">Click to Copy!</span>
 			<a href="#" id="copy">Copy to Clipboard</a>
 			<span id="cody">[bucket id="<?php echo $pid; ?>" title="<?php echo $title; ?>"]</span>
+			<span>[bucket id="<?php echo $pid; ?>" title="<?php echo $title; ?>"]</span>
 		</div>
 </div>

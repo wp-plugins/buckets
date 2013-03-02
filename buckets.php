@@ -128,6 +128,7 @@ function create_bucket_field_groups()
 {
 
 
+	// See if the field group "Buckets" exists already. 
 	$arr = (array)get_page_by_title('Buckets', OBJECT, 'acf');
 
 	if (empty($arr)) {
