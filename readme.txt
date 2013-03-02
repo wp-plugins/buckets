@@ -41,6 +41,9 @@ Videos coming soon
 
 
 == Changelog ==
+= 0.1.9.2 =
+[Fixed] - Error in Buckets Area field. 
+
 = 0.1.9.1 =
 [Added] - Documentation 
 

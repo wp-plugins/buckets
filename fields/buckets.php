@@ -392,7 +392,8 @@ class Buckets_field extends acf_Field
 			// create array to hold value data
 			$ordered_posts[ $post->ID ] = $post;
 		}
-				
+		
+		$buckets = false;
 		// override value array with attachments
 		foreach( $value as $k => $v)
 		{
