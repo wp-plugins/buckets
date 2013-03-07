@@ -41,6 +41,9 @@ Videos coming soon
 
 
 == Changelog ==
+= 0.1.9.3 = 
+[Fixed] - Removed ZeroClipboard function because of security exploit found. 
+
 = 0.1.9.2 =
 [Fixed] - Error in Buckets Area field. 
 
