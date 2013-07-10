@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.1.9.3
+Version: 0.2
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -16,10 +16,16 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.1.9.3';
+$bucket_version = '0.2';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
+include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+// Make Sure ACF is loaded
+if (is_plugin_active('advanced-custom-fields/acf.php')) {
+	add_action('acf/register_fields', 'register_bucket_fields');
+}
+
 
 
 /*--------------------------------------------------------------------------------------
@@ -65,18 +71,28 @@ function buckets_init()
 	// Create TinyMCE Button
 	create_tinymce_button();
 
+	//Load Before ACF
+	load_first();
 
-	
-	// Make Sure ACF is loaded
-	include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-	if (is_plugin_active('advanced-custom-fields/acf.php')) 
-	{
-		remove_post_type_support( 'buckets', 'editor' );
-		load_first();
-		register_field('Buckets_field', WP_PLUGIN_DIR . '/buckets/fields/buckets.php');
-		create_bucket_field_groups();
-	}
+}
 
+
+
+
+/*--------------------------------------------------------------------------------------
+*
+*	register_bucket_fields
+*	Registers the Buckets fields and adds the default field groups. 
+*
+*	@author Matthew Restorff
+* 
+*-------------------------------------------------------------------------------------*/
+
+function register_bucket_fields()
+{
+	remove_post_type_support( 'buckets', 'editor' );
+	include_once(WP_PLUGIN_DIR . '/buckets/fields/buckets.php');
+	create_bucket_field_groups();
 }
 
 
@@ -161,7 +177,7 @@ function create_bucket_field_groups()
 		$post_id = wp_insert_post($sidebars);
 
 		add_post_meta($post_id, '_edit_last', '1');
-		add_post_meta($post_id, 'field_bucketskey778', 'a:8:{s:5:"label";s:7:"Sidebar";s:4:"name";s:7:"sidebar";s:4:"type";s:13:"buckets_field";s:12:"instructions";s:0:"";s:8:"required";s:1:"0";s:3:"max";s:0:"";s:3:"key";s:19:"field_bucketskey778";s:8:"order_no";s:1:"0";}');
+		add_post_meta($post_id, 'field_bucketskey778', 'a:9:{s:3:"key";s:19:"field_bucketskey778";s:5:"label";s:7:"Sidebar";s:4:"name";s:7:"sidebar";s:4:"type";s:7:"buckets";s:12:"instructions";s:0:"";s:8:"required";s:1:"0";s:3:"max";s:0:"";s:17:"conditional_logic";a:3:{s:6:"status";s:1:"0";s:5:"rules";a:1:{i:0;a:2:{s:5:"field";s:4:"null";s:8:"operator";s:2:"==";}}s:8:"allorany";s:3:"all";}s:8:"order_no";i:0;}');
 		add_post_meta($post_id, 'allorany', 'all');
 		add_post_meta($post_id, 'rule', 'a:4:{s:5:"param";s:9:"post_type";s:8:"operator";s:2:"==";s:5:"value";s:4:"page";s:8:"order_no";s:1:"0";}');
 		add_post_meta($post_id, 'position', 'normal');

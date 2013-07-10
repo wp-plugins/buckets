@@ -41,6 +41,9 @@ Videos coming soon
 
 
 == Changelog ==
+= 0.2 = 
+[Fixed] - Updated Buckets plugin to work with ACF 4.0. 
+
 = 0.1.9.3 = 
 [Fixed] - Removed ZeroClipboard function because of security exploit found. 
 
