@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.2
+Version: 0.2.1
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -16,10 +16,12 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.2';
+$bucket_version = '0.2.1';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
+add_filter( 'manage_edit-buckets_columns', 'bucket_columns' );
+add_action( 'manage_buckets_posts_custom_column', 'bucket_columns_content', 10, 2 );
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 // Make Sure ACF is loaded
 if (is_plugin_active('advanced-custom-fields/acf.php')) {
@@ -62,6 +64,7 @@ function buckets_init()
 		'hierarchical' => true,
 		'rewrite' => false,
 		'query_var' => "buckets",
+		'exclude_from_search' => true,
 		'supports' => array(
 			'title', 'editor', 'revisions',
 		),
@@ -77,6 +80,86 @@ function buckets_init()
 }
 
 
+
+
+function bucket_columns( $columns ) {
+
+	$columns = array(
+		'cb' => '<input type="checkbox" />',
+		'title' => __( 'Title' ),
+		'shortcode' => __( 'Shortcode' ),
+		'related' => __( 'Featured On' ),
+		'date' => __( 'Date' )
+	);
+
+	return $columns;
+}
+
+
+
+function bucket_columns_content($column, $post_id) {
+	global $post;
+	global $wpdb;
+
+	switch($column) {
+
+		case 'shortcode' :
+
+			echo '[bucket id="' . $post_id . '" title="' . get_the_title($post_id) . '"]';
+
+			break;
+
+		case 'related':
+		
+			// $type = 'type";s:7:"buckets';
+			// $meta_types = $wpdb->get_results("SELECT meta_value FROM wp_postmeta WHERE meta_value LIKE '%$type%'");
+			// print_r($meta_types);
+			// $str = 'name";s:7:"sidebar";s:4';
+			// $str2 = explode('name";s:7:"', $str);
+			// $display = explode('";s:4', $str2[1]);
+
+
+			$related = get_posts(array(
+				'post_type' => 'any',
+				'meta_query' => array(
+					'relation' => 'OR',
+					array(
+						'key' => 'sidebar', 
+						'value' => '"' . get_the_ID() . '"',
+						'compare' => 'LIKE'
+					),
+				)
+			));
+			
+			if( $related ){
+				echo 'Sidebar: ';
+				$c = 0;
+				foreach( $related as $p ){
+					if ($c == 0) $c++; else echo ' | ';
+					echo '<a href="' . get_edit_post_link($p->ID) . '">' . $p->post_title . '</a> ';
+				}
+				echo '<br />';
+			}
+
+			
+			$sc = '[bucket id="' . $post_id . '"';
+			$shortcodes = $wpdb->get_results("SELECT ID, post_title FROM $wpdb->posts WHERE post_type!='revision' AND post_content LIKE '%$sc%'");
+			
+			if( $shortcodes ){
+				echo 'Shortcode: ';
+				$c = 0;
+				foreach( $shortcodes as $s ){
+					if ($c == 0) $c++; else echo ' | ';
+					echo '<a href="' . get_edit_post_link($s->ID) . '">' . $s->post_title . '</a> ';
+				}
+			}
+
+			break;
+
+		default :
+			break;
+	}
+}
 
 
 /*--------------------------------------------------------------------------------------
@@ -193,6 +276,7 @@ function create_bucket_field_groups()
 
 
 
+
 /*--------------------------------------------------------------------------------------
 *
 *	admin_head
@@ -280,14 +364,16 @@ function shortcode_meta_box()
 
 function get_bucket($id)
 {
-
+	
 	$post = get_post($id);
 	$return = ($post->post_content != '') ? wpautop($post->post_content) : '';
 
 	//If ACF is Active perform some wizardry
 	if (is_plugin_active('advanced-custom-fields/acf.php')) {
+		
 		while(has_sub_field("buckets", $id)) {
 			$layout = get_row_layout();
+
 		    ob_start(); 
 
 		    $file = str_replace(' ', '', $layout) . '.php';
@@ -298,7 +384,7 @@ function get_bucket($id)
 		    	echo 'Bucket template does not exist.'; 
 		    }
 
-		    $return = ob_get_clean(); 
+		    $return .= ob_get_clean(); 
 		}
 	}
     return $return;

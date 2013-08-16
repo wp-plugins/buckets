@@ -41,6 +41,11 @@ Videos coming soon
 
 
 == Changelog ==
+= 0.2.1 =
+[Added] - Better display on Buckets page, now shows shortcode and pages that Buckets are on. 
+[Fixed] - Now loops through get_bucket function if more then one flex layout are added to a single bucket. 
+
+
 = 0.2 = 
 [Fixed] - Updated Buckets plugin to work with ACF 4.0. 
 
