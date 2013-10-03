@@ -1,5 +1,5 @@
 === Buckets ===
-Contributors: Matthew Restorff
+Contributors: Matthew Restorff, matthewordie
 Tags: widgets, buckets, acf, advanced custom fields, custom, field, widgets alternative, sidebar
 Requires at least: 3.0
 Tested up to: 3.4.1
@@ -37,10 +37,13 @@ Read the docs for more info: https://docs.google.com/document/d/1fDhqmtKWTy-0oxT
 
 You can view the documentation here: https://docs.google.com/document/d/1fDhqmtKWTy-0oxTP8GUg7wdhv-VULNoBFkJbLvKNdzo/edit?usp=sharing
 
-Videos coming soon
 
 
 == Changelog ==
+= 0.2.2 = 
+* [Fixed] - Various minor fixes and updates
+* [Added] - Contextual Help Tab that links to the Buckets Documentation on Google Docs
+
 = 0.2.1 =
 [Added] - Better display on Buckets page, now shows shortcode and pages that Buckets are on. 
 [Fixed] - Now loops through get_bucket function if more then one flex layout are added to a single bucket. 
