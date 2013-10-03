@@ -1,5 +1,5 @@
 === Buckets ===
-Contributors: Matthew Restorff, matthewordie
+Contributors: matthewordie
 Tags: widgets, buckets, acf, advanced custom fields, custom, field, widgets alternative, sidebar
 Requires at least: 3.0
 Tested up to: 3.4.1
