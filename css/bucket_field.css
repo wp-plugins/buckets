@@ -1,11 +1,3 @@
-/* WP Admin Icons */
-#menu-posts-buckets .wp-menu-image { width: 28px; height: 28px; background: url(../img/bucket-16x16.png) no-repeat 6px 6px !important; }
-#menu-posts-buckets:hover .wp-menu-image, #menu-posts-buckets.wp-has-current-submenu .wp-menu-image { background: url(../img/bucket-hover-16x16.png) no-repeat 6px 6px !important; }
-#icon-edit.icon32-posts-buckets { background: url(../img/bucket-32x32.png) no-repeat; }
-.new-bucket { float: left; margin-top: 10px !important; }
-
-
-
 /*---------------------------------------------------------------------------------------------
 *
 *	ACF Buckets
@@ -93,10 +85,11 @@
 	text-transform: uppercase;
 	float: right;
 	font-size: 11px;
+	display: none;
 }
 
 .acf_buckets .relationship_list li:hover a .relationship-item-info {
-	padding-right: 40px;
+	padding-right: 20px;
 	color: #999;
 }
 
@@ -110,11 +103,10 @@
 .acf_buckets .relationship_list li a:focus {
 	background: #eaf2fa;
 	color: #000;
-	text-indent: 24px;
 }
 
-.acf_buckets .relationship_list li.hide:hover a{
-	text-indent: 0px;
+.acf_buckets .relationship_list li.hide:hover a, .acf_buckets .relationship_left .relationship_list li:hover a {
+	text-indent: 0px !important;
 }
 
 .acf_buckets .relationship_right .relationship_list {
@@ -185,18 +177,8 @@
 	display: none;
 }
 
-.acf_buckets .edit { display: none; min-width: 16px; min-height: 16px; 
-	background-image: -moz-linear-gradient(top, #FFFFFF 0%, #eaeaea 100%);
-	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #FFFFFF), color-stop(1, #eaeaea));
-	background-image: -webkit-linear-gradient(top, #FFFFFF 0%, #eaeaea 100%);
-	background-image: linear-gradient(to bottom, #FFFFFF 0%, #eaeaea 100%);
-	position: absolute; top: 5px; right: 9px;
-	font-size: 10px;
-	box-shadow: 0 0 2px #222;
-	padding: 2px 5px;
-	cursor: pointer;
-	z-index: 2;
-}
-.acf_buckets .edit:hover { color: #21759b; font-weight: bold; }
+.acf_buckets .edit { display: none; min-width: 16px; min-height: 16px; color: #fff; border-radius: 2px; max-height: 16px; padding: 2px 5px 5px; background: #c0c0c0; position: absolute; top: 5px; right: 35px; font-size: 10px; cursor: pointer; z-index: 2; }
+.acf_buckets .relationship_list li .edit:hover { color: #fff; background: #2ea2cc; }
 .acf_buckets .relationship_list li:hover .edit { display: block; }
 .acf_buckets .relationship_list li.hide .edit { display: none; }
+.new-bucket { float: left; margin-top: 10px !important; }

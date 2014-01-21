@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.2.1
+Version: 0.2.3
 Author URI: http://www.matthewrestorff.com 
 */  
 
@@ -16,11 +16,12 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 * 
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.2.1';
+$bucket_version = '0.2.3';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
 add_filter( 'manage_edit-buckets_columns', 'bucket_columns' );
+add_filter('contextual_help', 'add_help_tab', 10, 2);
 add_action( 'manage_buckets_posts_custom_column', 'bucket_columns_content', 10, 2 );
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 // Make Sure ACF is loaded
@@ -59,6 +60,7 @@ function buckets_init()
 		'labels' => $labels,
 		'public' => true,
 		'show_ui' => true,
+		'menu_icon' => 'dashicons-screenoptions',
 		'_builtin' =>  false,
 		'capability_type' => 'page',
 		'hierarchical' => true,
@@ -82,7 +84,8 @@ function buckets_init()
 
 
 
-function bucket_columns( $columns ) {
+function bucket_columns( $columns ) 
+{
 
 	$columns = array(
 		'cb' => '<input type="checkbox" />',
@@ -97,7 +100,8 @@ function bucket_columns( $columns ) {
 
 
 
-function bucket_columns_content($column, $post_id) {
+function bucket_columns_content($column, $post_id) 
+{
 	global $post;
 	global $wpdb;
 
@@ -111,14 +115,6 @@ function bucket_columns_content($column, $post_id) {
 
 		case 'related':
 		
-			// $type = 'type";s:7:"buckets';
-			// $meta_types = $wpdb->get_results("SELECT meta_value FROM wp_postmeta WHERE meta_value LIKE '%$type%'");
-			// print_r($meta_types);
-			// $str = 'name";s:7:"sidebar";s:4';
-			// $str2 = explode('name";s:7:"', $str);
-			// $display = explode('";s:4', $str2[1]);
-
-
 			$related = get_posts(array(
 				'post_type' => 'any',
 				'meta_query' => array(
@@ -160,6 +156,21 @@ function bucket_columns_content($column, $post_id) {
 			break;
 	}
 }
+
+
+function add_help_tab() {
+    
+   if (get_current_screen()->post_type == 'buckets'){
+   		 get_current_screen()->add_help_tab( array(
+            'id'        => 'buckets-help-tab',
+            'title'     => __( 'Documentation' ),
+            'content'   => __( '<p>Confused? View the documentation on <a href="http://goo.gl/nf8WTY">Google Docs</a> or <a href="mailto:m@matthewrestorff.com?subject=Buckets">email me</a> if you have any questions or comments.</p>' )
+            ) );
+   }
+   
+}
+
+
 
 
 /*--------------------------------------------------------------------------------------
@@ -291,7 +302,6 @@ function buckets_admin_head()
 
 	if (isset($GLOBALS['post_type']) && $GLOBALS['post_type'] == 'buckets')
 	{
-		wp_enqueue_script('clipboard', plugins_url('',__FILE__) . '/js/zclip.js?v=' . $bucket_version);
 		wp_enqueue_style('buckets', plugins_url('',__FILE__) . '/css/buckets.css?v=' . $bucket_version);
 		if ($GLOBALS['pagenow'] == 'post.php' && !isset($_GET['popup']))
 		{
@@ -299,10 +309,10 @@ function buckets_admin_head()
 		}
 		
 	}
-
-	wp_enqueue_style('bucket-icons', plugins_url('',__FILE__) . '/css/icons.css?v=' . $bucket_version);
-	wp_enqueue_script('buckets', plugins_url('',__FILE__) . '/js/buckets.js?v=' . $bucket_version);
-	
+	if ($GLOBALS['pagenow'] == 'post.php') {
+		wp_enqueue_style('bucket-field', plugins_url('',__FILE__) . '/css/bucket_field.css?v=' . $bucket_version);
+		wp_enqueue_script('buckets', plugins_url('',__FILE__) . '/js/buckets.js?v=' . $bucket_version);
+	}
 	if (isset($_GET['popup'])){
 		wp_enqueue_style('buckets-popup', plugins_url('',__FILE__) . '/css/popup.css?v=' . $bucket_version);
 		wp_enqueue_script('buckets-popup', plugins_url('',__FILE__) . '/js/popup.js?v=' . $bucket_version);

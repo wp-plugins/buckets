@@ -40,9 +40,15 @@ You can view the documentation here: https://docs.google.com/document/d/1fDhqmtK
 
 
 == Changelog ==
+
+= 0.2.3 = 
+[Fixed] - Buckets can be added/edited without leaving the page you're editing again. Now works with the newest ACF Relationship Field. 
+[Fixed] - Dashboard Icon to match the changes in Wordpress 3.8
+
 = 0.2.2 = 
-* [Fixed] - Various minor fixes and updates
-* [Added] - Contextual Help Tab that links to the Buckets Documentation on Google Docs
+[Fixed] - Various minor fixes and updates
+[Added] - Contextual Help Tab that links to the Buckets Documentation on Google Docs
+[Fixed] - Add/Edit on page feature is back. Went missing after the upgrade to ACF 4.0.
 
 = 0.2.1 =
 [Added] - Better display on Buckets page, now shows shortcode and pages that Buckets are on. 
@@ -65,30 +71,30 @@ You can view the documentation here: https://docs.google.com/document/d/1fDhqmtK
 [Fixed] - Changed Shortcode "Copy to Clipboard" feature to just use a link. The shortcode text is now selectable (for none flash browsers). 
 [Added] - Bucket type displays on Bucket Area field. 
 [Fixed] - Improved Add and Edit functions of the Buckets Area field. No longer saves as draft. 
-[Fixed] - Cleaned up minor styles.
+[Fixed] - Cleaned up minor styles. 
 
 = 0.1.8 = 
-[Fixed] - TinyMCE shortcode was inserting incorrectly
-[Fixed] - Uploaded deprecated wp_get_single_post function to get_post
-[Fixed] - Adjusted Buckets Area field styles
-[Fixed] - Bucket Area field output to be slightly more efficient. 
-[Fixed] - Added wpautop function to content output
-[Added] - You can now add new Buckets from the Buckets Sidebar field! Now you can edit all your content from a single page. 
-[Fixed] - Fixed plugin initilization function to prevent compatibility issues. 
+[Fixed] - TinyMCE shortcode was inserting incorrectly 
+[Fixed] - Uploaded deprecated wp_get_single_post function to get_post 
+[Fixed] - Adjusted Buckets Area field styles 
+[Fixed] - Bucket Area field output to be slightly more efficient.  
+[Fixed] - Added wpautop function to content output 
+[Added] - You can now add new Buckets from the Buckets Sidebar field! Now you can edit all your content from a single page.  
+[Fixed] - Fixed plugin initilization function to prevent compatibility issues.  
 
 = 0.1.7 = 
 [Added] - Added a TinyMCE button that will let you select a bucket and it will automatically insert the shortcode for you. Must faster for editing your content and easier on your clients. 
 
 = 0.1.6 = 
-[Added] - Automatically setups default fields for ACF when installed
-[Fixed] - Minor Bug Fixes
+[Added] - Automatically setups default fields for ACF when installed 
+[Fixed] - Minor Bug Fixes 
 
 = 0.1.5 =
 [Added] - Buckets Area field - The beginning of an easier way for creating your "sidebars". 
-[Fixed] - Updated to include new ACF has_sub_field function
-[Fixed] - Bug with template output
-[Fixed] - Bucket icon not displaying
+[Fixed] - Updated to include new ACF has_sub_field function 
+[Fixed] - Bug with template output 
+[Fixed] - Bucket icon not displaying 
 
 = 0.1.4 =
-[Fixed] - Updated plugin and field to work with newest ACF changes. 
-[Fixed] - Minor Bug Fixeschange_log.txt	935 B	9/14/2012 10:58:00 PM
+[Fixed] - Updated plugin and field to work with newest ACF changes.  
+[Fixed] - Minor Bug Fixes
