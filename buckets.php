@@ -1,12 +1,12 @@
 <?php
-/* 
+/*
 Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.2.3
-Author URI: http://www.matthewrestorff.com 
-*/  
+Version: 0.2.4
+Author URI: http://www.matthewrestorff.com
+*/
 
 
 /*--------------------------------------------------------------------------------------
@@ -14,14 +14,14 @@ Author URI: http://www.matthewrestorff.com
 *	Buckets
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.2.3';
+$bucket_version = '0.2.4';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
 add_filter( 'manage_edit-buckets_columns', 'bucket_columns' );
-add_filter('contextual_help', 'add_help_tab', 10, 2);
+add_filter('contextual_help', 'add_bucket_help_tab', 10, 2);
 add_action( 'manage_buckets_posts_custom_column', 'bucket_columns_content', 10, 2 );
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 // Make Sure ACF is loaded
@@ -36,10 +36,10 @@ if (is_plugin_active('advanced-custom-fields/acf.php')) {
 *	init
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
-function buckets_init() 
+function buckets_init()
 {
 
 	// Setup Buckets
@@ -53,7 +53,7 @@ function buckets_init()
 	    'view_item' => __('View Bucket', 'buckets'),
 	    'search_items' => __('Search Buckets', 'buckets'),
 	    'not_found' =>  __('No Buckets found', 'buckets'),
-	    'not_found_in_trash' => __('No Buckets found in Trash', 'buckets'), 
+	    'not_found_in_trash' => __('No Buckets found in Trash', 'buckets'),
 	);
 
 	register_post_type('buckets', array(
@@ -77,14 +77,14 @@ function buckets_init()
 	create_tinymce_button();
 
 	//Load Before ACF
-	load_first();
+	bucket_load_first();
 
 }
 
 
 
 
-function bucket_columns( $columns ) 
+function bucket_columns( $columns )
 {
 
 	$columns = array(
@@ -100,7 +100,7 @@ function bucket_columns( $columns )
 
 
 
-function bucket_columns_content($column, $post_id) 
+function bucket_columns_content($column, $post_id)
 {
 	global $post;
 	global $wpdb;
@@ -114,19 +114,19 @@ function bucket_columns_content($column, $post_id)
 			break;
 
 		case 'related':
-		
+
 			$related = get_posts(array(
 				'post_type' => 'any',
 				'meta_query' => array(
 					'relation' => 'OR',
 					array(
-						'key' => 'sidebar', 
+						'key' => 'sidebar',
 						'value' => '"' . get_the_ID() . '"',
 						'compare' => 'LIKE'
 					),
 				)
 			));
-			
+
 			if( $related ){
 				echo 'Sidebar: ';
 				$c = 0;
@@ -137,10 +137,10 @@ function bucket_columns_content($column, $post_id)
 				echo '<br />';
 			}
 
-			
+
 			$sc = '[bucket id="' . $post_id . '"';
 			$shortcodes = $wpdb->get_results("SELECT ID, post_title FROM $wpdb->posts WHERE post_type!='revision' AND post_content LIKE '%$sc%'");
-			
+
 			if( $shortcodes ){
 				echo 'Shortcode: ';
 				$c = 0;
@@ -158,8 +158,8 @@ function bucket_columns_content($column, $post_id)
 }
 
 
-function add_help_tab() {
-    
+function add_bucket_help_tab() {
+
    if (get_current_screen()->post_type == 'buckets'){
    		 get_current_screen()->add_help_tab( array(
             'id'        => 'buckets-help-tab',
@@ -167,7 +167,7 @@ function add_help_tab() {
             'content'   => __( '<p>Confused? View the documentation on <a href="http://goo.gl/nf8WTY">Google Docs</a> or <a href="mailto:m@matthewrestorff.com?subject=Buckets">email me</a> if you have any questions or comments.</p>' )
             ) );
    }
-   
+
 }
 
 
@@ -176,10 +176,10 @@ function add_help_tab() {
 /*--------------------------------------------------------------------------------------
 *
 *	register_bucket_fields
-*	Registers the Buckets fields and adds the default field groups. 
+*	Registers the Buckets fields and adds the default field groups.
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
 function register_bucket_fields()
@@ -196,28 +196,28 @@ function register_bucket_fields()
 *	create_tinymce_button
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
 function create_tinymce_button()
-{	
+{
 	// Don't bother doing this stuff if the current user lacks permissions
    if ( ! current_user_can('edit_posts') && ! current_user_can('edit_pages') )
      return;
- 
+
    // Add only in Rich Editor mode
    if ( get_user_option('rich_editing') == 'true') {
-      add_filter( 'mce_external_plugins', 'add_plugin' );
-      add_filter( 'mce_buttons', 'register_button' );
+      add_filter( 'mce_external_plugins', 'bucket_add_tinymce_plugin' );
+      add_filter( 'mce_buttons', 'bucket_register_tinymce_button' );
    }
 }
 
-function add_plugin($plugin_array) {   
+function bucket_add_tinymce_plugin($plugin_array) {
    $plugin_array['buckets'] = plugins_url() . '/buckets/js/tinymce/bucketshortcode.js';
    return $plugin_array;
 }
 
-function register_button($buttons) {
+function bucket_register_tinymce_button($buttons) {
    array_push( $buttons, "|", "buckets" );
    return $buttons;
 }
@@ -231,14 +231,14 @@ function register_button($buttons) {
 *	create_field_group
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
 function create_bucket_field_groups()
 {
 
 
-	// See if the field group "Buckets" exists already. 
+	// See if the field group "Buckets" exists already.
 	$arr = (array)get_page_by_title('Buckets', OBJECT, 'acf');
 
 	if (empty($arr)) {
@@ -293,7 +293,7 @@ function create_bucket_field_groups()
 *	admin_head
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
 function buckets_admin_head()
@@ -305,9 +305,9 @@ function buckets_admin_head()
 		wp_enqueue_style('buckets', plugins_url('',__FILE__) . '/css/buckets.css?v=' . $bucket_version);
 		if ($GLOBALS['pagenow'] == 'post.php' && !isset($_GET['popup']))
 		{
-			add_meta_box('buckets-shortcode', 'Shortcode', 'shortcode_meta_box', 'buckets', 'normal', 'high');
+			add_meta_box('buckets-shortcode', 'Shortcode', 'bucket_shortcode_meta_box', 'buckets', 'normal', 'high');
 		}
-		
+
 	}
 	if ($GLOBALS['pagenow'] == 'post.php') {
 		wp_enqueue_style('bucket-field', plugins_url('',__FILE__) . '/css/bucket_field.css?v=' . $bucket_version);
@@ -317,12 +317,12 @@ function buckets_admin_head()
 		wp_enqueue_style('buckets-popup', plugins_url('',__FILE__) . '/css/popup.css?v=' . $bucket_version);
 		wp_enqueue_script('buckets-popup', plugins_url('',__FILE__) . '/js/popup.js?v=' . $bucket_version);
 	}
-	
-	// The WP Thickbox dimensions are hard coded into the media-upload. With this we strip it and make our own. 
+
+	// The WP Thickbox dimensions are hard coded into the media-upload. With this we strip it and make our own.
 	wp_deregister_script( 'media-upload' );
 	wp_enqueue_script(
-	    'media-upload', 
-	    plugins_url('',__FILE__) . '/js/media-upload.js?v=' . $bucket_version, 
+	    'media-upload',
+	    plugins_url('',__FILE__) . '/js/media-upload.js?v=' . $bucket_version,
 	    array( 'thickbox' )
 	);
 }
@@ -334,10 +334,10 @@ function buckets_admin_head()
 *	buckets_shortcode
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
-function buckets_shortcode($arg) 
+function buckets_shortcode($arg)
 {
 	$return = get_bucket($arg['id']);
 	return $return;
@@ -350,10 +350,10 @@ function buckets_shortcode($arg)
 *	shortcode_meta_box
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
-function shortcode_meta_box()
+function bucket_shortcode_meta_box()
 {
 	include('admin/shortcode.php');
 }
@@ -369,32 +369,32 @@ function shortcode_meta_box()
 *	@author Matthew Restorff
 *	@params id - post id of the bucket element
 *	@params sc - if called from a shortcode the content needs to be put into a variable to output in the correct place
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
 function get_bucket($id)
 {
-	
+
 	$post = get_post($id);
 	$return = ($post->post_content != '') ? wpautop($post->post_content) : '';
 
 	//If ACF is Active perform some wizardry
 	if (is_plugin_active('advanced-custom-fields/acf.php')) {
-		
+
 		while(has_sub_field("buckets", $id)) {
 			$layout = get_row_layout();
 
-		    ob_start(); 
+		    ob_start();
 
 		    $file = str_replace(' ', '', $layout) . '.php';
 		    $path = (file_exists(TEMPLATEPATH . '/buckets/' . $file)) ? TEMPLATEPATH . '/buckets/' . $file : WP_PLUGIN_DIR . '/buckets/templates/' . $file;
 		    if (file_exists($path)) {
 		    	include($path);
 		    } else {
-		    	echo 'Bucket template does not exist.'; 
+		    	echo 'Bucket template does not exist.';
 		    }
 
-		    $return .= ob_get_clean(); 
+		    $return .= ob_get_clean();
 		}
 	}
     return $return;
@@ -408,15 +408,15 @@ function get_bucket($id)
 *	Loads the buckets plugin before the ACF plugin to ensure compatibility
 *
 *	@author Matthew Restorff
-* 
+*
 *-------------------------------------------------------------------------------------*/
 
-function load_first() 
+function bucket_load_first()
 {
 	$this_plugin = 'buckets/buckets.php';
 	$active_plugins = get_option('active_plugins');
 	$this_plugin_key = array_search($this_plugin, $active_plugins);
-	if ($this_plugin_key) 
+	if ($this_plugin_key)
 	{
 		array_splice($active_plugins, $this_plugin_key, 1);
 		array_unshift($active_plugins, $this_plugin);

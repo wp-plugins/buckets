@@ -541,7 +541,7 @@ class acf_field_buckets extends acf_field
 	</div>
 	<!-- / Right List -->
 	<a href="<?php echo bloginfo('url'); ?>/wp-admin/post-new.php?post_type=buckets&popup=true&TB_iframe=1" title="New Bucket" class="button-primary new-bucket thickbox">Add New</a>
-
+	<div style="clear: both;"></div>
 </div>
 		<?php
 	}
