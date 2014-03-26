@@ -40,6 +40,9 @@ You can view the documentation here: https://docs.google.com/document/d/1fDhqmtK
 
 
 == Changelog ==
+= 0.2.5 =
+[Fixed] - Shortcodes will now work when used inside of a bucket when you aren't using ACF.
+
 = 0.2.4 =
 [Fixed] - Added prefixes to functions to fix any incompatibility with other plugins.
 

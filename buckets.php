@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.2.4
+Version: 0.2.5
 Author URI: http://www.matthewrestorff.com
 */
 
@@ -16,7 +16,7 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 *
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.2.4';
+$bucket_version = '0.2.5';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
@@ -375,8 +375,8 @@ function bucket_shortcode_meta_box()
 function get_bucket($id)
 {
 
-	$post = get_post($id);
-	$return = ($post->post_content != '') ? wpautop($post->post_content) : '';
+	$return = apply_filters('the_content', get_post_field('post_content', $id));
+
 
 	//If ACF is Active perform some wizardry
 	if (is_plugin_active('advanced-custom-fields/acf.php')) {
