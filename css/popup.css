@@ -1,8 +1,27 @@
-html { margin: 0 !important; padding: 0 !important; }
-#adminmenuback, #adminmenuwrap, #wpadminbar, #screen-meta, #screen-options-link-wrap, #footer, .update-nag, #edit-slug-box { display: none !important; }
-#wpcontent { margin: 0px 20px 0 20px !important; }
-#postbox-container-1, #postbox-container-1, #postbox-container-1 .postbox { margin-right: -150px !important; width: 119px !important; min-width: 50px !important; }
-#poststuff #post-body.columns-2 { margin-right: 150px !important; }
-#delete-action a { color: red; display: none; }
-#delete-action a:hover { background: red; color: #fff; }
-#publishing-action, #delete-action { text-align: center !important; float: none !important; margin-bottom: 7px !important; }
+/*
+*   Styles for the Add New and Edit Bucket modal window
+*/
+#bucket-popup { padding-bottom: 30px; }
+
+.acf-button, .acf-fc-popup, .button-primary { font-weight: bold !important; }
+.button-primary { margin-left: 10px !important; }
+
+
+.acf-fc-popup {
+    right: 107px !important;
+    margin-top: auto !important;
+    margin-left: auto !important;
+    top: 50%  !important;
+    transform: translateY(-50%);
+}
+
+.acf-fc-popup .bit {
+    top: 50% !important;
+    left: auto !important;
+    right: -20px !important;
+    margin: -10px 0 0 0 !important;
+    border-top-color: transparent !important;
+    border-left-color: #333739 !important;
+}
+
+

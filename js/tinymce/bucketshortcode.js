@@ -4,8 +4,8 @@
         ed.addCommand('bucketShortcodes', function() {
            ed.windowManager.open({
                    file : url + '/bucketshortcode.php',
-                   width : 480,
-                   height: 315,
+                   width : 900,
+                   height: 500,
                    title : 'Bucket Shortcode',
                    inline : 1
            }, {
@@ -15,7 +15,7 @@
 
          ed.addButton('buckets', {
             title : 'Buckets',
-            image : url+'/bucket.png',
+            icon  : 'icon buckets-icon',
             cmd   : 'bucketShortcodes'
          });
       },

@@ -17,11 +17,11 @@ Now you can make a reusable piece of content. Place it right in the middle of an
 
 You can even create a fully modular site using sidebar areas and just throwing buckets in everywhere!
 
-This plugin is made for developers who like to make their client's lives easier (and their own).
+This plugin is made for developers who like to make their client's lives easier (and in turn, their own).
 
 Documentation is available on google docs: https://docs.google.com/document/d/1fDhqmtKWTy-0oxTP8GUg7wdhv-VULNoBFkJbLvKNdzo/edit?usp=sharing
 
-Video docs coming soon!
+Please feel free to let me know if you have any questions or feedback!
 
 
 == Installation ==
@@ -40,6 +40,12 @@ You can view the documentation here: https://docs.google.com/document/d/1fDhqmtK
 
 
 == Changelog ==
+= 0.3.0 =
+[Added] - Updated Buckets for ACF Pro v5+
+[Fixed] - Rebuilt the Add/Edit Bucket on page function. Now uses ACF Front End Fields and works much more reliably!
+[Fixed] - Rebuilt the TinyMCE shortcode plugin
+[Fixed] - Lots of minor updates, tweaks and cleanup.
+
 = 0.2.5 =
 [Fixed] - Shortcodes will now work when used inside of a bucket when you aren't using ACF.
 

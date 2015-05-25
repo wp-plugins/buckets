@@ -1,7 +1,7 @@
 <?php
 
 class acf_field_buckets extends acf_field
-{	
+{
 	/*
 	*  __construct
 	*
@@ -10,7 +10,7 @@ class acf_field_buckets extends acf_field
 	*  @since	3.6
 	*  @date	23/01/13
 	*/
-	
+
 	function __construct()
 	{
 		// vars
@@ -35,32 +35,32 @@ class acf_field_buckets extends acf_field
 							</li>
 							'
 		);
-		
-		
+
+
 		// do not delete!
     	parent::__construct();
-    	
-    	
+
+
     	// extra
 		add_action('wp_ajax_acf/fields/buckets/query_posts', array($this, 'query_posts'));
 		add_action('wp_ajax_nopriv_acf/fields/buckets/query_posts', array($this, 'query_posts'));
 	}
-	
-	
+
+
 	/*
 	*  load_field()
-	*  
+	*
 	*  This filter is appied to the $field after it is loaded from the database
-	*  
+	*
 	*  @type filter
 	*  @since 3.6
 	*  @date 23/01/13
-	*  
+	*
 	*  @param $field - the field array holding all the field options
-	*  
+	*
 	*  @return $field - the field array holding all the field options
 	*/
-	
+
 	function load_field( $field )
 	{
 		// validate post_type
@@ -69,66 +69,66 @@ class acf_field_buckets extends acf_field
 			$field['post_type'] = array( 'all' );
 		}
 
-		
+
 		// validate taxonomy
 		if( !$field['taxonomy'] || !is_array($field['taxonomy']) || in_array('', $field['taxonomy']) )
 		{
 			$field['taxonomy'] = array( 'all' );
 		}
-		
-		
+
+
 		// validate result_elements
 		if( !is_array( $field['result_elements'] ) )
 		{
 			$field['result_elements'] = array();
 		}
-		
+
 		if( !in_array('post_title', $field['result_elements']) )
 		{
 			$field['result_elements'][] = 'post_title';
 		}
-		
-		
+
+
 		// filters
 		if( !is_array( $field['filters'] ) )
 		{
 			$field['filters'] = array();
 		}
-		
-		
+
+
 		// return
 		return $field;
 	}
-		
+
 
 	/*
    	*  posts_where
    	*
-   	*  @description: 
+   	*  @description:
    	*  @created: 3/09/12
    	*/
-   	
+
    	function posts_where( $where, &$wp_query )
 	{
 	    global $wpdb;
-	    
+
 	    if ( $title = $wp_query->get('like_title') )
 	    {
 	        $where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( like_escape(  $title ) ) . "%'";
 	    }
-	    
+
 	    return $where;
 	}
-	
-	
+
+
 	/*
 	*  query_posts
 	*
-	*  @description: 
+	*  @description:
 	*  @since: 3.6
 	*  @created: 27/01/13
 	*/
-	
+
 	function query_posts()
    	{
    		// vars
@@ -155,73 +155,73 @@ class acf_field_buckets extends acf_field
 			'nonce'						=>	'',
 			'ancestor'					=>	false,
 		);
-		
+
 		$options = array_merge( $options, $_POST );
-		
-		
+
+
 		// validate
 		if( ! wp_verify_nonce($options['nonce'], 'acf_nonce') )
 		{
 			die();
 		}
-		
-		
+
+
 		// WPML
 		if( $options['lang'] )
 		{
 			global $sitepress;
-			
+
 			$sitepress->switch_lang( $options['lang'] );
 		}
-		
-		
+
+
 		// convert types
 		$options['post_type'] = explode(',', $options['post_type']);
 		$options['taxonomy'] = explode(',', $options['taxonomy']);
-		
-		
+
+
 		// load all post types by default
 		if( in_array('all', $options['post_type']) )
 		{
 			$options['post_type'] = 'buckets';
 		}
-		
-		
+
+
 		// attachment doesn't work if it is the only item in an array???
 		if( is_array($options['post_type']) && count($options['post_type']) == 1 )
 		{
 			$options['post_type'] = $options['post_type'][0];
 		}
-		
-		
+
+
 		// create tax queries
 		if( ! in_array('all', $options['taxonomy']) )
 		{
 			// vars
 			$taxonomies = array();
 			$options['tax_query'] = array();
-			
+
 			foreach( $options['taxonomy'] as $v )
 			{
-				
+
 				// find term (find taxonomy!)
 				// $term = array( 0 => $taxonomy, 1 => $term_id )
-				$term = explode(':', $v); 
-				
-				
+				$term = explode(':', $v);
+
+
 				// validate
 				if( !is_array($term) || !isset($term[1]) )
 				{
 					continue;
 				}
-				
-				
+
+
 				// add to tax array
 				$taxonomies[ $term[0] ][] = $term[1];
-				
+
 			}
-			
-			
+
+
 			// now create the tax queries
 			foreach( $taxonomies as $k => $v )
 			{
@@ -232,21 +232,21 @@ class acf_field_buckets extends acf_field
 				);
 			}
 		}
-		
+
 		unset( $options['taxonomy'] );
-		
-		
+
+
 		// search
 		if( $options['s'] )
 		{
 			$options['like_title'] = $options['s'];
-			
+
 			add_filter( 'posts_where', array($this, 'posts_where'), 10, 2 );
 		}
-		
+
 		unset( $options['s'] );
-		
-		
+
+
 		// load field
 		$field = array();
 		if( $options['ancestor'] )
@@ -258,97 +258,97 @@ class acf_field_buckets extends acf_field
 		{
 			$field = apply_filters('acf/load_field', array(), $options['field_key'] );
 		}
-		
-		
+
+
 		// get the post from which this field is rendered on
 		$the_post = get_post( $options['post_id'] );
-		
-		
+
+
 		// filters
 		$options = apply_filters('acf/fields/buckets/query', $options, $field, $the_post);
 		$options = apply_filters('acf/fields/buckets/query/name=' . $field['name'], $options, $field, $the_post );
 		$options = apply_filters('acf/fields/buckets/query/key=' . $field['key'], $options, $field, $the_post );
-		
-		
+
+
 		// query
 		$wp_query = new WP_Query( $options );
 
-		
+
 		// global
 		global $post;
-		
-		
+
+
 		// loop
 		while( $wp_query->have_posts() )
 		{
 			$wp_query->the_post();
-			
-			
+
+
 			// right aligned info
 			$title = '<span class="relationship-item-info">';
-				
+
 				if( in_array('post_type', $field['result_elements']) )
 				{
 					$title .= get_post_type();
 				}
-				
+
 				// WPML
 				if( $options['lang'] )
 				{
 					$title .= ' (' . $options['lang'] . ')';
 				}
-				
+
 			$title .= '</span>';
-			
-			
+
+
 			// featured_image
 			if( in_array('featured_image', $field['result_elements']) )
 			{
 				$image = get_the_post_thumbnail( get_the_ID(), array(21, 21) );
-				
+
 				$title .= '<div class="result-thumbnail">' . $image . '</div>';
 			}
-			
-			
+
+
 			// title
 			$title .= get_the_title();
-			
-			
+
+
 			// status
 			if( get_post_status() != "publish" )
 			{
 				$title .= ' (' . get_post_status() . ')';
 			}
-				
-			
+
+
 			// filters
 			$title = apply_filters('acf/fields/buckets/result', $title, $post, $field, $the_post);
 			$title = apply_filters('acf/fields/buckets/result/name=' . $field['name'] , $title, $post, $field, $the_post);
 			$title = apply_filters('acf/fields/buckets/result/key=' . $field['key'], $title, $post, $field, $the_post);
-			
-			
+
+
 			// update html
 			$r['html'] .= '<li><a href="' . get_permalink() . '" data-post_id="' . get_the_ID() . '">' . $title .  '<span class="acf-button-add"></span></a></li>';
 		}
-		
-		
+
+
 		if( (int)$options['paged'] >= $wp_query->max_num_pages )
 		{
 			$r['next_page_exists'] = 0;
 		}
-		
-		
+
+
 		wp_reset_postdata();
-		
-		
+
+
 		// return JSON
 		echo json_encode( $r );
-		
+
 		die();
-			
+
 	}
-	
-	
+
+
 	/*
 	*  create_field()
 	*
@@ -360,20 +360,20 @@ class acf_field_buckets extends acf_field
 	*  @since	3.6
 	*  @date	23/01/13
 	*/
-	
+
 	function create_field( $field )
 	{
 		// global
 		global $post;
 
-		
+
 		// no row limit?
 		if( !$field['max'] || $field['max'] < 1 )
 		{
 			$field['max'] = 9999;
 		}
-		
-		
+
+
 		// class
 		$class = '';
 		if( $field['filters'] )
@@ -383,7 +383,7 @@ class acf_field_buckets extends acf_field
 				$class .= ' has-' . $filter;
 			}
 		}
-		
+
 		$attributes = array(
 			'max' => $field['max'],
 			's' => '',
@@ -392,30 +392,30 @@ class acf_field_buckets extends acf_field
 			'taxonomy' => implode(',', $field['taxonomy']),
 			'field_key' => $field['key']
 		);
-		
-		
+
+
 		// Lang
 		if( defined('ICL_LANGUAGE_CODE') )
 		{
 			$attributes['lang'] = ICL_LANGUAGE_CODE;
 		}
-		
-		
+
+
 		// parent
 		preg_match('/\[(field_.*?)\]/', $field['name'], $ancestor);
 		if( isset($ancestor[1]) && $ancestor[1] != $field['key'])
 		{
 			$attributes['ancestor'] = $ancestor[1];
 		}
-				
+
 		?>
 <div class="acf_relationship acf_buckets<?php echo $class; ?>"<?php foreach( $attributes as $k => $v ): ?> data-<?php echo $k; ?>="<?php echo $v; ?>"<?php endforeach; ?>>
-	
-	
+
+
 	<!-- Hidden Blank default value -->
 	<input type="hidden" name="<?php echo $field['name']; ?>" value="" />
-	
-	
+
+
 	<!-- Left List -->
 	<div class="relationship_left">
 		<table class="widefat">
@@ -430,14 +430,14 @@ class acf_field_buckets extends acf_field
 				<?php if(in_array( 'post_type', $field['filters']) ): ?>
 				<tr>
 					<th>
-						<?php 
-						
+						<?php
+
 						// vars
 						$choices = array(
 							'all' => __("Filter by post type",'acf')
 						);
-						
-						
+
+
 						if( in_array('all', $field['post_type']) )
 						{
 							$post_types = apply_filters( 'acf/get_post_types', array() );
@@ -450,8 +450,8 @@ class acf_field_buckets extends acf_field
 								$choices[ $post_type ] = $post_type;
 							}
 						}
-						
-						
+
+
 						// create field
 						do_action('acf/create_field', array(
 							'type'	=>	'select',
@@ -460,7 +460,7 @@ class acf_field_buckets extends acf_field
 							'value'	=>	'',
 							'choices' => $choices,
 						));
-						
+
 						?>
 					</th>
 				</tr>
@@ -474,7 +474,7 @@ class acf_field_buckets extends acf_field
 		</ul>
 	</div>
 	<!-- /Left List -->
-	
+
 	<!-- Right List -->
 	<div class="relationship_right">
 		<ul class="bl relationship_list">
@@ -486,30 +486,30 @@ class acf_field_buckets extends acf_field
 			{
 				// right aligned info
 				$title = '<span class="relationship-item-info">';
-					
+
 					if( in_array('post_type', $field['result_elements']) )
 					{
 						$title .= $p->post_type;
 					}
-					
+
 					// WPML
 					if( defined('ICL_LANGUAGE_CODE') )
 					{
 						$title .= ' (' . ICL_LANGUAGE_CODE . ')';
 					}
-					
+
 				$title .= '</span>';
-				
-				
+
+
 				// featured_image
 				if( in_array('featured_image', $field['result_elements']) )
 				{
 					$image = get_the_post_thumbnail( $p->ID, array(21, 21) );
-					
+
 					$title .= '<div class="result-thumbnail">' . $image . '</div>';
 				}
-				
-				
+
+
 				// find title. Could use get_the_title, but that uses get_post(), so I think this uses less Memory
 				$title .= apply_filters( 'the_title', $p->post_title, $p->ID );
 
@@ -519,23 +519,23 @@ class acf_field_buckets extends acf_field
 					$title .= " ($p->post_status)";
 				}
 
-				
+
 				// filters
 				$title = apply_filters('acf/fields/buckets/result', $title, $p, $field, $post);
 				$title = apply_filters('acf/fields/buckets/result/name=' . $field['name'] , $title, $p, $field, $post);
 				$title = apply_filters('acf/fields/buckets/result/key=' . $field['key'], $title, $p, $field, $post);
-				
-				
+
+
 				echo '<li>
 					<span class="edit" data-url="' . get_admin_url() . 'post.php?post=' . $p->ID . '&action=edit&popup=true&TB_iframe=1">Edit</span>
 					<a href="' . get_permalink($p->ID) . '" class="" data-post_id="' . $p->ID . '">' . $title . '<span class="acf-button-remove"></span></a>
 					<input type="hidden" name="' . $field['name'] . '[]" value="' . $p->ID . '" />
 				</li>';
-				
-					
+
+
 			}
 		}
-			
+
 		?>
 		</ul>
 	</div>
@@ -545,9 +545,9 @@ class acf_field_buckets extends acf_field
 </div>
 		<?php
 	}
-	
-	
-	
+
+
+
 	/*
 	*  create_options()
 	*
@@ -560,13 +560,13 @@ class acf_field_buckets extends acf_field
 	*
 	*  @param	$field	- an array holding all the field's data
 	*/
-	
+
 	function create_options( $field )
 	{
 		// vars
 		$field = array_merge($this->defaults, $field);
 		$key = $field['name'];
-		
+
 		?>
 
 
@@ -575,7 +575,7 @@ class acf_field_buckets extends acf_field
 		<label><?php _e("Maximum posts",'acf'); ?></label>
 	</td>
 	<td>
-		<?php 
+		<?php
 		do_action('acf/create_field', array(
 			'type'	=>	'text',
 			'name'	=>	'fields['.$key.'][max]',
@@ -585,12 +585,12 @@ class acf_field_buckets extends acf_field
 	</td>
 </tr>
 		<?php
-		
+
 	}
 
 
 
-	
+
 	/*
 	*  format_value()
 	*
@@ -606,7 +606,7 @@ class acf_field_buckets extends acf_field
 	*
 	*  @return	$value	- the modified value
 	*/
-	
+
 	function format_value( $value, $post_id, $field, $output = false )
 	{
 		// empty?
@@ -614,26 +614,26 @@ class acf_field_buckets extends acf_field
 		{
 			return $value;
 		}
-		
-		
+
+
 		// Pre 3.3.3, the value is a string coma seperated
 		if( is_string($value) )
 		{
 			$value = explode(',', $value);
 		}
-		
-		
+
+
 		// empty?
 		if( !is_array($value) || empty($value) )
 		{
 			return $value;
 		}
-		
-		
+
+
 		// convert to integers
 		$value = array_map('intval', $value);
-		
-		
+
+
 		// convert into post objects
 		$value = $this->get_posts( $value );
 
@@ -647,13 +647,13 @@ class acf_field_buckets extends acf_field
 			// return
 			return $buckets;
 		}
-		
+
 		// return value
-		return $value;	
-			
+		return $value;
+
 	}
-	
-	
+
+
 	/*
 	*  format_value_for_api()
 	*
@@ -669,12 +669,12 @@ class acf_field_buckets extends acf_field
 	*
 	*  @return	$value	- the modified value
 	*/
-	
+
 	function format_value_for_api( $value, $post_id, $field )
 	{
 		return $this->format_value($value,$post_id,$field,true);
 	}
-	
+
 
 	/*
 	*  get_posts
@@ -687,7 +687,7 @@ class acf_field_buckets extends acf_field
 	*  @param	$post_ids (array) the array of post ID's
 	*  @return	(array) an array of post objects
 	*/
-	
+
 	function get_posts( $post_ids )
 	{
 		// validate
@@ -695,12 +695,12 @@ class acf_field_buckets extends acf_field
 		{
 			return $post_ids;
 		}
-		
-		
+
+
 		// vars
 		$r = array();
-		
-		
+
+
 		// find posts (DISTINCT POSTS)
 		$posts = get_posts(array(
 			'numberposts'	=>	-1,
@@ -709,15 +709,15 @@ class acf_field_buckets extends acf_field
 			'post_status'	=>	'any',
 		));
 
-		
+
 		$ordered_posts = array();
 		foreach( $posts as $p )
 		{
 			// create array to hold value data
 			$ordered_posts[ $p->ID ] = $p;
 		}
-		
-		
+
+
 		// override value array with attachments
 		foreach( $post_ids as $k => $v)
 		{
@@ -727,14 +727,14 @@ class acf_field_buckets extends acf_field
 				$r[] = $ordered_posts[ $v ];
 			}
 		}
-		
-		
+
+
 		// return
 		return $r;
 	}
 
 
-	
+
 	/*
 	*  update_value()
 	*
@@ -750,24 +750,24 @@ class acf_field_buckets extends acf_field
 	*
 	*  @return	$value - the modified value
 	*/
-	
+
 	function update_value( $value, $post_id, $field )
 	{
 		// array?
 		if( is_array($value) ){ foreach( $value as $k => $v ){
-			
+
 			// object?
 			if( is_object($v) && isset($v->ID) )
 			{
 				$value[ $k ] = $v->ID;
 			}
-			
+
 		}}
-				
-		
+
+
 		return $value;
 	}
-	
+
 }
 
 new acf_field_buckets();
