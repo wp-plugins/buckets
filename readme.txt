@@ -40,6 +40,12 @@ You can view the documentation here: https://docs.google.com/document/d/1fDhqmtK
 
 
 == Changelog ==
+= 0.3.2 =
+[Fixed] - Fields weren't loading properly with ACF 4
+
+= 0.3.1 =
+[Fixed] - TinyMCE button CSS was loading incorrectly
+
 = 0.3.0 =
 [Added] - Updated Buckets for ACF Pro v5+
 [Fixed] - Rebuilt the Add/Edit Bucket on page function. Now uses ACF Front End Fields and works much more reliably!

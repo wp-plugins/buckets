@@ -4,7 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-Version: 0.3.0
+Version: 0.3.2
 Author URI: http://www.matthewrestorff.com
 */
 
@@ -16,7 +16,7 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 *
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.3.0';
+$bucket_version = '0.3.2';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
@@ -73,9 +73,6 @@ function buckets_init()
 		),
 		'show_in_menu'	=> true,
 	));
-
-	// Create TinyMCE Button
-	create_tinymce_button();
 
 }
 
@@ -187,8 +184,9 @@ function add_bucket_help_tab() {
 *	@author Matthew Restorff
 *
 *-------------------------------------------------------------------------------------*/
-function include_field_types_buckets($acf_version)
+function include_field_types_buckets()
 {
+	global $acf_version;
 	remove_post_type_support( 'buckets', 'editor' );
 	include_once(WP_PLUGIN_DIR . '/buckets/fields/acf-buckets-v'. $acf_version . '.php');
 	create_bucket_field_groups($acf_version);
@@ -196,10 +194,10 @@ function include_field_types_buckets($acf_version)
 // If ACF is loaded
 if (is_plugin_active('advanced-custom-fields-pro/acf.php')) {
 	add_action('acf/include_field_types', 'include_field_types_buckets');
-	do_action('5'); // ACF v5.x
+	$acf_version = '5';
 } elseif (is_plugin_active('advanced-custom-fields/acf.php')) {
 	add_action('acf/register_fields', 'include_field_types_buckets');
-	do_action('4'); // ACF v4.x
+	$acf_version = '4';
 }
 
 
@@ -409,6 +407,7 @@ function create_bucket_field_groups($acf_version)
 
 function buckets_admin_head()
 {
+
 	global $bucket_version;
 
 	if (isset($GLOBALS['post_type']) && $GLOBALS['post_type'] == 'buckets')
@@ -428,6 +427,10 @@ function buckets_admin_head()
 	    plugins_url('',__FILE__) . '/js/media-upload.js?v=' . $bucket_version,
 	    array( 'thickbox' )
 	);
+
+	// Create TinyMCE Button
+	create_tinymce_button();
+
 }
 
 
