@@ -16,7 +16,7 @@ Author URI: http://www.matthewrestorff.com
 *	@author Matthew Restorff
 *
 *-------------------------------------------------------------------------------------*/
-$bucket_version = '0.3.2';
+$bucket_version = '0.3.3';
 add_action('init', 'buckets_init');
 add_action( 'admin_head', 'buckets_admin_head' );
 add_shortcode( 'bucket', 'buckets_shortcode' );
