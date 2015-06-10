@@ -40,6 +40,13 @@ You can view the documentation here: https://docs.google.com/document/d/1fDhqmtK
 
 
 == Changelog ==
+<<<<<<< HEAD
+=======
+= 0.3.3 =
+[Added] - Ability to use custom variables in your shortcodes. Thanks to user summatix! This allows shortcodes to be called like [bucket id="1234" title="My Bucket" myvar="myvalue"]. Inside buckets you can use %%myvar%% to access the custom variable.
+
+
+>>>>>>> master
 = 0.3.2 =
 [Fixed] - Fields weren't loading properly with ACF 4
 
