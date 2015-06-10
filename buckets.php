@@ -4,11 +4,7 @@ Plugin Name: Buckets
 Plugin URI: http://www.matthewrestorff.com
 Description: A Widget Alternative. Add reusable content inside of content. On a per page basis.
 Author: Matthew Restorff
-<<<<<<< HEAD
-Version: 0.3.2
-=======
 Version: 0.3.3
->>>>>>> master
 Author URI: http://www.matthewrestorff.com
 */
 
