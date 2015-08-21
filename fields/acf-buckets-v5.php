@@ -122,11 +122,11 @@ class acf_field_buckets extends acf_field {
         // update $args
         if( !empty($options['post_type']) ) {
 
-            $args['post_type'] = acf_force_type_array( $options['post_type'] );
+            $args['post_type'] = acf_get_array( $options['post_type'] );
 
         } elseif( !empty($field['post_type']) ) {
 
-            $args['post_type'] = acf_force_type_array( $field['post_type'] );
+            $args['post_type'] = acf_get_array( $field['post_type'] );
 
         } else {
 
@@ -242,7 +242,7 @@ class acf_field_buckets extends acf_field {
 
 
             // optgroup or single
-            $post_types = acf_force_type_array( $args['post_type'] );
+            $post_types = acf_get_array( $args['post_type'] );
 
             // add as optgroup or results
             if( count($post_types) == 1 ) {
@@ -392,7 +392,7 @@ class acf_field_buckets extends acf_field {
     function get_posts( $value ) {
 
         // force value to array
-        $value = acf_force_type_array( $value );
+        $value = acf_get_array( $value );
 
 
         // convert to int
@@ -469,7 +469,7 @@ class acf_field_buckets extends acf_field {
 
 
         // data types
-        $field['post_type'] = acf_force_type_array( $field['post_type'] );
+        $field['post_type'] = acf_get_array( $field['post_type'] );
 
         // post_types
         $post_types = array();
@@ -634,7 +634,7 @@ class acf_field_buckets extends acf_field {
         }
 
         // force value to array
-        $value = acf_force_type_array( $value );
+        $value = acf_get_array( $value );
 
         // convert to int
         $value = array_map('intval', $value);
@@ -677,7 +677,7 @@ class acf_field_buckets extends acf_field {
 
 
         // force value to array
-        $value = acf_force_type_array( $value );
+        $value = acf_get_array( $value );
 
 
         // array
